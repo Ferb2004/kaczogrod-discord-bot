@@ -9,7 +9,7 @@ class Github(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"{__name__} jest online.")
+        print(f"{__name__} działa.")
 
     @app_commands.command(name="github", description="Link do Githuba.")
     async def github(self, interaction: discord.Interaction):
@@ -17,7 +17,7 @@ class Github(commands.Cog):
             colour=0xffffff
         )
         embed.set_author(name="Github",
-                         url="https://github.com/Ferb2004/kaczogrod-bot",
+                         url="https://github.com/Ferb2004/kaczogrod-discord-bot",
                          icon_url="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png")
 
         await interaction.response.send_message(embed=embed)
