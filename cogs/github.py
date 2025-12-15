@@ -20,7 +20,21 @@ class Github(commands.Cog):
                          url="https://github.com/Ferb2004/kaczogrod-discord-bot",
                          icon_url="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png")
 
-        await interaction.response.send_message(embed=embed)
+        view = discord.ui.View()
+
+        buttonGithub = discord.ui.Button(label="Github",
+                                   url="https://github.com/Ferb2004/kaczogrod-discord-bot")
+        view.add_item(buttonGithub)
+
+        buttonIssues = discord.ui.Button(label="Zgłoś błąd/zaproponuj funkcję",
+                                    url="https://github.com/Ferb2004/kaczogrod-discord-bot/issues/new/choose")
+        view.add_item(buttonIssues)
+
+        buttonReleases = discord.ui.Button(label="Lista Zmian",
+                                    url="https://github.com/Ferb2004/kaczogrod-discord-bot/releases")
+        view.add_item(buttonReleases)
+
+        await interaction.response.send_message(embed= embed, view= view)
 
 
 
