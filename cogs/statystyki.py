@@ -16,6 +16,10 @@ class Statystyki(commands.Cog):
         self.bot = bot
         self.name = self.__class__.__name__
 
+        self.group = StatystykiKomendy(self)
+        self.bot.tree.add_command(self.group)
+        self.update_online_count.start()
+
     def cog_unload(self):
         self.update_online_count.cancel()
         self.bot.tree.remove_command(
@@ -84,26 +88,22 @@ class Statystyki(commands.Cog):
     async def before_update(self):
         await self.bot.wait_until_ready()
 
-    @update_online_count.error
-    async def update_online_count_error(self, error):
-        tb = "".join(traceback.format_exception(type(error), error, error.__traceback__))
-
-        self.bot.cog_status[self.name] = {
-            "ok": False,
-            "error": str(error),
-            "traceback": tb
-        }
-
-        logger.error(f"{self.name} {self.bot.cog_status}")
+#    @update_online_count.error
+#    async def update_online_count_error(self, error):
+#        tb = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+#
+#        self.bot.cog_status[self.name] = {
+#            "ok": False,
+#            "error": str(error),
+#            "traceback": tb
+#        }
+#
+#        logger.error(f"{self.name} {self.bot.cog_status}")
 
 
     @commands.Cog.listener()
     async def on_ready(self):
         logger.info(f"{__name__} działa.")
-
-    async def on_app_command_error(self, interaction, error):
-        logger.error("[SlashCommand] ❌ Błąd komendy:")
-        traceback.print_exception(type(error), error, error.__traceback__)
 
 
 class StatystykiKomendy(app_commands.Group):
@@ -126,13 +126,6 @@ class StatystykiKomendy(app_commands.Group):
     @app_commands.describe(kanal= 'Kanał który będzie wyświetlał ilość użytkowników online.')
     async def online(self, interaction: discord.Interaction, kanal: discord.VoiceChannel):
 
-        if self.cog.task_failed:
-            await interaction.response.send_message(
-                "❌ Moduł statystyk jest obecnie w stanie błędu.\n",
-                ephemeral=True
-            )
-            return
-
         await interaction.response.defer(ephemeral=True)
         UpdateGuildConfig(
             interaction.guild.id,
@@ -146,13 +139,6 @@ class StatystykiKomendy(app_commands.Group):
     @app_commands.command(name="boty", description="Ustawia kanał do liczenia botów.")
     @app_commands.describe(kanal='Kanał który będzie wyświetlał ilość botów.')
     async def boty(self, interaction: discord.Interaction, kanal: discord.VoiceChannel):
-
-        if self.cog.task_failed:
-            await interaction.response.send_message(
-                "❌ Moduł statystyk jest obecnie w stanie błędu.\n",
-                ephemeral=True
-            )
-            return
 
         await interaction.response.defer(ephemeral=True)
         UpdateGuildConfig(
