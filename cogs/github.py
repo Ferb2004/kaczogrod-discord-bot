@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
+from logger import logger
+
 
 class Github(commands.Cog):
     def __init__(self, bot):
@@ -9,9 +11,9 @@ class Github(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"{__name__} działa.")
+        logger.info(f"{__name__} działa.")
 
-    @app_commands.command(name="github", description="Link do Githuba.")
+    @app_commands.command(name="kod", description="Wysyła link do kodu źródłowego.")
     async def github(self, interaction: discord.Interaction):
         embed = discord.Embed(
             colour=0xffffff

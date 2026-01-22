@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
+from logger import logger
+
 import random
 
 class Moneta(commands.Cog):
@@ -11,7 +13,7 @@ class Moneta(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"{__name__} jest online.")
+        logger.info(f"{__name__} działa.")
 
 
     @app_commands.command(name="moneta", description="Rzut monetą.")

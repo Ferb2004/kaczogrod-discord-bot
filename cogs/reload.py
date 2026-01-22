@@ -1,7 +1,11 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
+
+from logger import logger
+
 import os
+
 
 class Reload(commands.Cog):
     def __init__(self, bot):
@@ -9,7 +13,7 @@ class Reload(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"{__name__} działa.")
+        logger.info(f"{__name__} działa.")
 
     def get_all_cogs(self, folder="cogs") -> list[str]:
         """
@@ -48,10 +52,13 @@ class Reload(commands.Cog):
         try:
             await self.bot.reload_extension(f"cogs.{cog}")
             await interaction.response.send_message(f"✅ Przeładowano `cogs.{cog}`", ephemeral=True)
+            logger.info(f"[✅] Przeładowano cogs.{cog}")
         except commands.ExtensionNotFound:
             await interaction.response.send_message(f"❌ Nie znaleziono coga `cogs.{cog}`", ephemeral=True)
+            logger.warn(f"[❌] Nie znaleziono coga cogs.{cog}")
         except Exception as e:
             await interaction.response.send_message(f"❌ Błąd przy przeładowywaniu `cogs.{cog}`\n```{e}```", ephemeral=True)
+            logger.error(f"[❌] Błąd przy przeładowywaniu cogs.{cog}\n```{e}```")
 
 async def setup(bot):
     await bot.add_cog(Reload(bot))
