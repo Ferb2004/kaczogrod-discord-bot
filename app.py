@@ -1,14 +1,18 @@
 import discord
 from discord.ext import commands
+
+from logger import logger
+import logging as py_logging
+
 from dotenv import load_dotenv
 
 import os
 import asyncio
 
+py_logging.getLogger("discord").setLevel(py_logging.INFO)
 
 load_dotenv(".env")
 TOKEN: str = os.getenv("TOKEN")
-SERWER: str = os.getenv("SERWER")
 
 
 bot = commands.Bot(command_prefix="$", intents=discord.Intents.all())
@@ -16,12 +20,12 @@ bot = commands.Bot(command_prefix="$", intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
-    print("Bot gotowy!")
+    logger.info("[✅] Bot gotowy!")
     try:
         synced_commands = await bot.tree.sync()
-        print(f"Liczba zsynchronizowanych komend: {len(synced_commands)}")
+        logger.info(f"[✅] Liczba zsynchronizowanych komend: {len(synced_commands)}")
     except Exception as e:
-        print("Problem z synchoronizacją komend:", e)
+        logger.error(f"[❌] Problem z synchoronizacją komend: \n {e}")
 
 
 async def load():
