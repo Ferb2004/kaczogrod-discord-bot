@@ -17,8 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Kopiowanie kodu źródłowego bota do obrazu kontenera
 COPY . .
 
-RUN adduser -D appuser && chown -R appuser:appuser /app
-USER appuser
+#RUN adduser -D appuser && chown -R appuser:appuser /app
+#USER appuser
 
 # Wykazanie komendy uruchamiania bota podczas startowania kontenera
 CMD ["python", "./app.py"]
