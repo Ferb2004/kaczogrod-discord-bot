@@ -2,10 +2,14 @@ import json
 import os
 import inspect
 import hashlib
-from logger import logger
+from logger import logger, get_logger
 
 
-CONFIG_PATH = "config.json"
+logger = get_logger(__name__)
+
+
+CONFIG_PATH = os.path.join("data", "config.json")
+os.makedirs("data", exist_ok=True)
 
 def _detect_source() -> str:
     frame = inspect.currentframe()
@@ -36,11 +40,21 @@ def LoadConfig():
 
 
 def SaveConfig(data):
-    with open('config.json', 'w') as f:
+    ''' Funkcja do zapisywania configu.
+    '''
+    with open(CONFIG_PATH, 'w') as f:
         json.dump(data, f, indent=4)
 
 
 def GetGuildConfig(guild_id: int):
+    ''' Funkcja do wczytywania configu.
+
+        Args:
+            guild_id: Id gildii, której chce dostać się parametry z configu.
+
+        Returns:
+            Zwraca parametr gildii z configu.
+    '''
     data = LoadConfig()
     return data.setdefault("guilds", {}).setdefault(str(guild_id), {})
 
@@ -49,7 +63,15 @@ def UpdateGuildConfig(
     guild_id: int,
     updates: dict,
     *,
-    user_id: str | None = None):
+    user_id: int | None = None):
+    ''' Funkcja do aktualizacja configu pre guild.
+
+        Args:
+            guild_id: Id gildii, z której użytkownik wykonuje komendę. W większości najlepiej użyć "interaction.guild.id".
+            updates: Dictionary z danymi do dodania/zmiany.
+            user_id: Id użytkownika. Anonimizowane potem w logach.
+
+    '''
 
     data = LoadConfig()
 
@@ -68,12 +90,10 @@ def UpdateGuildConfig(
 
     source = _detect_source()
 
-    hashed_user = (
-        hashlib.sha256(f"{guild_id}-{user_id}".encode()).hexdigest() if user_id else "unknown"
-    )
+    hashed_user = (hashlib.sha256(f"{guild_id}-{user_id}".encode()).hexdigest() if user_id else "unknown")
 
     logger.info(
-        "Config updated | guild=%s | source=%s | updates=%s | hashed_user=%s",
+        "Config zmieniony | guild=%s | source=%s | updates=%s | hashed_user=%s",
         guild_id,
         source,
         updates,
@@ -81,6 +101,9 @@ def UpdateGuildConfig(
     )
 
 
+# ─────────────────────────────────────────
+# Funkcje do zarządzania hashem commitu
+# ─────────────────────────────────────────
 def GetStoredCommit() -> str | None:
     data = LoadConfig()
     return data.get("meta", {}).get("last_commit")
