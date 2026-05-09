@@ -2,7 +2,8 @@
 > Chwilowo development prowadzony jest mocno w kratkę.
 ---
 # Spis treści
-[O projekcie](#o-projekcie)  
+[O projekcie](#o-projekcie)
+
 [Jak zacząć](#jak-zaczac)  
 - [Docker Compose](#docker-compose)
 - [Własne budowanie obrazu](#wlasne-budowanie-obrazu)
