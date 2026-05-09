@@ -5,7 +5,9 @@
 
 # Jak zacząć
 ### Docker Compose
-Zalecany sposób
+# Zalecany sposób
+
+Plik compose
 ```
 version: '3'
 
@@ -21,11 +23,16 @@ services:
       - ./logs:/app/logs
 ```
 
+Plik .env
+```
+DISCORD_TOKEN=
+```
 ---
 
 ### Własne budowanie obrazu docker
 > [!WARNING]
 > Nie zalecane i robione na własną odpowiedzialność.
+Plik compose
 ```
 version: '3'
 
@@ -40,4 +47,9 @@ services:
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
+```
+
+Plik .env
+```
+DISCORD_TOKEN=
 ```
