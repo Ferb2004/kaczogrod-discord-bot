@@ -4,7 +4,7 @@
 # Spis treści
 [O projekcie](#o-projekcie)
 
-[Jak zacząć](#jak-zaczac)  
+[Jak zacząć](#jak-zaczac)
 - [Docker Compose](#docker-compose)
 - [Własne budowanie obrazu](#wlasne-budowanie-obrazu)
 # O projekcie
