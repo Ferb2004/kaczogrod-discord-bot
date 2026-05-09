@@ -1,9 +1,11 @@
-> [!IMPORTANT]
+> [!NOTE]
 > Chwilowo development prowadzony jest mocno w kratkę.
 ---
 # Spis treści
 [O projekcie](#o-projekcie)
 [Jak zacząć](#jak-zaczac)
+- [Docker Compose](#docker-compose)
+- [Własne budowanie obrazu](#wlasne-budowanie-obrazu)
 # O projekcie
 
 # Jak zacząć
@@ -32,7 +34,7 @@ DISCORD_TOKEN=
 ---
 
 ### Własne budowanie obrazu
-> [!WARNING]
+> [!CAUTION]
 > Nie zalecane i robione na własną odpowiedzialność.
 Plik compose
 ```
