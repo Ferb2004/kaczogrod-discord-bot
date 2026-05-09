@@ -1,4 +1,4 @@
-###O projekcie
+### O projekcie
 
-###Jak zacząć
-##Docker Compose
+### Jak zacząć
+## Docker Compose
