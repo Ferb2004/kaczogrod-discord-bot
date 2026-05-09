@@ -4,8 +4,8 @@
 # O projekcie
 
 # Jak zacząć
-### Docker Compose
-# Zalecany sposób
+## Docker Compose
+### Zalecany sposób
 
 Plik compose
 ```
@@ -29,7 +29,7 @@ DISCORD_TOKEN=
 ```
 ---
 
-### Własne budowanie obrazu docker
+## Własne budowanie obrazu docker
 > [!WARNING]
 > Nie zalecane i robione na własną odpowiedzialność.
 Plik compose
