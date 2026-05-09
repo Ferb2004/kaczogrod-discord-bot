@@ -1,6 +1,8 @@
 > [!IMPORTANT]
 > Chwilowo development prowadzony jest mocno w kratkę.
 ---
+# Spis treści
+[Link Text][#O projekcie]
 # O projekcie
 
 # Jak zacząć
