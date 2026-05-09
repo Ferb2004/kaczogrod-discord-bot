@@ -21,6 +21,8 @@ services:
 ---
 
 ### Własne budowanie obrazu docker
+> [!WARNING]
+> Nie zalecane i robione na własną odpowiedzialność.
 ```
 version: '3'
 
