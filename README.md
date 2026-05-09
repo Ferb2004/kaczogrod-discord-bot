@@ -59,4 +59,4 @@ Plik .env
 DISCORD_TOKEN=
 ```
 # Funkcje
-### [x] Kanały do liczenia członków online oraz botów na serwerze.
+### - [x] Kanały do liczenia członków online oraz botów na serwerze.
