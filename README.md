@@ -5,7 +5,6 @@
 
 # Jak zacząć
 ## Docker Compose
-### Zalecany sposób
 
 Plik compose
 ```
