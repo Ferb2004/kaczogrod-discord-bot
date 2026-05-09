@@ -17,6 +17,9 @@ services:
       - ./data:/app/data
       - ./logs:/app/logs
 ```
+
+---
+
 ### Własne budowanie obrazu docker
 ```
 version: '3'
