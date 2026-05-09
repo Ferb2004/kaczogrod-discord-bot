@@ -1,5 +1,6 @@
 > [!IMPORTANT]
 > Chwilowo development prowadzony jest mocno w kratkę.
+> [Contribution guidelines for this project](app.py)
 ---
 # Spis treści
 [Link Text][#Oprojekcie]
