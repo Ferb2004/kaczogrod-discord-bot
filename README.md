@@ -28,7 +28,7 @@ DISCORD_TOKEN=
 ```
 ---
 
-## Własne budowanie obrazu docker
+## Własne budowanie obrazu
 > [!WARNING]
 > Nie zalecane i robione na własną odpowiedzialność.
 Plik compose
