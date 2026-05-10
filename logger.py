@@ -2,32 +2,109 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
+
+# ─────────────────────────────────────────
+# Konfiguracja katalogu i ścieżek
+# ─────────────────────────────────────────
 LOG_DIR = "logs"
 LOG_FILE = "bot.log"
-
 os.makedirs(LOG_DIR, exist_ok=True)
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+# ─────────────────────────────────────────
+# Niestandardowy poziom logowania: SUCCESS
+# ─────────────────────────────────────────
+# Poziom SUCCESS (25) mieści się między INFO (20) a WARNING (30),
+# co pozwala filtrować sukcesy osobno bez zagłuszania ostrzeżeń
+SUCCESS_LEVEL = 25
+logging.addLevelName(SUCCESS_LEVEL, "SUCCESS")
+
+def success(self, message, *args, **kwargs):
+    if self.isEnabledFor(SUCCESS_LEVEL):
+        self._log(SUCCESS_LEVEL, message, args, **kwargs)
+
+logging.Logger.success = success
+
+# ─────────────────────────────────────────
+# Formattery i handlery
+# ─────────────────────────────────────────
+def get_logger(name: str) -> logging.Logger:
+    return logging.getLogger(name)
+
+
+def log_cog_loaded(module_name: str):
+    get_logger(module_name).success("Cog aktywny i gotowy")
+
 
 def setup_logger():
-    logger = logging.getLogger("bot")
+    logger = logging.getLogger()
     logger.setLevel(logging.INFO)
 
     if logger.handlers:
-        return logger  # nie dubluj handlerów przy reloadach
+        return logger
 
-    formatter = logging.Formatter(
-        "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
+    class DefaultFormatter(logging.Formatter):
+        LEVEL_EMOJI = {
+            SUCCESS_LEVEL: "[✅]",
+            logging.INFO: "[ℹ]",
+            logging.WARNING: "[⚠️]",
+            logging.ERROR: "[❌]",
+            logging.CRITICAL: "[🔥]"
+        }
+
+        def format(self, record):
+            record.emoji = self.LEVEL_EMOJI.get(record.levelno, "")
+            return super().format(record)
+
+        def formatException(self, ei):
+            import traceback
+            import os
+
+            tb_lines = traceback.format_exception(*ei)
+            cleaned_lines = []
+
+            for line in tb_lines:
+                if 'File "' in line:
+                    parts = line.split('File "')
+                    if len(parts) > 1:
+                        before, after = parts[0], parts[1]
+                        path, rest = after.split('"', 1)
+
+                        try:
+                            rel_path = os.path.relpath(path, PROJECT_ROOT)
+
+                            # Ścieżki zaczynające się od ".." wskazują na zależności zewnętrzne
+                            # (venv, biblioteki systemowe) — skracamy do samej nazwy pliku
+                            # żeby logi nie ujawniały struktury środowiska deweloperskiego
+                            if rel_path.startswith(".."):
+                                rel_path = os.path.basename(path)
+
+                        except ValueError:
+                            # Windows: os.path.relpath() rzuca ValueError przy różnych dyskach
+                            # (np. plik w C:\ gdy PROJECT_ROOT jest w D:\) — fallback do nazwy pliku
+                            rel_path = os.path.basename(path)
+
+                        line = f'{before}File "{rel_path}"{rest}'
+
+                cleaned_lines.append(line)
+
+            return "".join(cleaned_lines)
+
+    formatter = DefaultFormatter(
+        "[%(asctime)s] %(emoji)s [%(levelname)s] [%(name)s] %(message)s",
+        datefmt= "%Y-%m-%d %H:%M:%S"
     )
 
-    # Konsola
+
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
 
-#TODO różnie pliki dla różnych serwerów, tylko błędy trafiają do ogólnego pliku z logami
-    # Plik (rotacja)
+    # 5MB na plik — kompromis między rozmiarem a zachowaniem
+    # wystarczającej historii przy typowym ruchu bota (~1k eventów/h)
+    # backupCount=5 daje łącznie ~25MB historii logów
     file_handler = RotatingFileHandler(
         os.path.join(LOG_DIR, LOG_FILE),
-        maxBytes=5 * 1024 * 1024,
+        maxBytes=5 * 1024 * 1024, #5MB
         backupCount=5,
         encoding="utf-8"
     )
