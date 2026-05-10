@@ -12,6 +12,8 @@
 Luźny projekt.
 
 # Jak zacząć
+> [!CAUTION]
+> Można używać, ale parę rzeczy jeszcze nie działa tak dobrze jak bym chciał.
 ### Docker Compose
 
 Plik compose
@@ -35,9 +37,6 @@ DISCORD_TOKEN=
 ---
 
 ### Własne budowanie obrazu
-> [!CAUTION]
-> Na ten moment nie zalecane i robione na własną odpowiedzialność.
-
 Plik compose
 ```
 services:
