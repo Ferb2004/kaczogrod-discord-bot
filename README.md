@@ -4,8 +4,8 @@
 - [O projekcie](#o-projekcie)
 
 - [Jak zacząć](#jak-zaczac)
--  [Docker Compose](#docker-compose)
--  [Własne budowanie obrazu](#wlasne-budowanie-obrazu)
+  - [Docker Compose](#docker-compose)
+  - [Własne budowanie obrazu](#wlasne-budowanie-obrazu)
 # O projekcie
 
 # Jak zacząć
