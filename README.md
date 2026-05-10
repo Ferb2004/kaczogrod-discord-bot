@@ -8,7 +8,7 @@
   - [Własne budowanie obrazu](#wlasne-budowanie-obrazu)
 - [Funkcje](#funkcje)
 # O projekcie
-
+Luźny projekt.
 # Jak zacząć
 ### Docker Compose
 
