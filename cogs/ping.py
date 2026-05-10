@@ -2,7 +2,10 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from logger import logger
+from logger import logger, get_logger, log_cog_loaded
+
+
+logger = get_logger(__name__)
 
 
 class Ping(commands.Cog):
@@ -11,12 +14,12 @@ class Ping(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logger.info(f"{__name__} działa.")
+        log_cog_loaded(__name__)
 
     @app_commands.command(name="ping", description="Pokazuje opóźnienie bota.")
     async def ping(self, interaction: discord.Interaction):
         embed = discord.Embed(
-            title=f"{round(self.bot.latency * 1000)} ms",
+            title=f"{round(self.bot.latency * 1000)} ms", # Mnożywy * 1000, żeby wynik był w ms, a nie sekundach
             color=discord.Color.green()
         )
         embed.set_author(name="Ping")
