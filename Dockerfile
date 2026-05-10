@@ -18,7 +18,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 #RUN adduser -D appuser && chown -R appuser:appuser /app
-#USER appuser
+
+# utwórz katalog logów i użytkownika, nadaj prawa
+RUN mkdir -p /app/logs \
+    && adduser -D -H -u 1000 appuser \
+    && chown -R appuser:appuser /app
+USER appuser
 
 # Wykazanie komendy uruchamiania bota podczas startowania kontenera
 CMD ["python", "./app.py"]
