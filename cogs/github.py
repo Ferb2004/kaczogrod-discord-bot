@@ -2,7 +2,10 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from logger import logger
+from logger import logger, get_logger, log_cog_loaded
+
+
+logger = get_logger(__name__)
 
 
 class Github(commands.Cog):
@@ -11,7 +14,7 @@ class Github(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logger.info(f"{__name__} działa.")
+        log_cog_loaded(__name__)
 
     @app_commands.command(name="kod", description="Wysyła link do kodu źródłowego.")
     async def github(self, interaction: discord.Interaction):
