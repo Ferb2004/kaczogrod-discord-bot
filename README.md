@@ -6,6 +6,7 @@
 - [Jak zacząć](#jak-zaczac)
   - [Docker Compose](#docker-compose)
   - [Własne budowanie obrazu](#wlasne-budowanie-obrazu)
+- [Funkcje](#funkcje)
 # O projekcie
 
 # Jak zacząć
