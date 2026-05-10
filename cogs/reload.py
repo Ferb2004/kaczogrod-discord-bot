@@ -2,9 +2,12 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from logger import logger
+from logger import logger, get_logger, log_cog_loaded
 
 import os
+
+
+logger = get_logger(__name__)
 
 
 class Reload(commands.Cog):
@@ -13,7 +16,7 @@ class Reload(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logger.info(f"{__name__} działa.")
+        log_cog_loaded(__name__)
 
     def get_all_cogs(self, folder="cogs") -> list[str]:
         """
@@ -30,7 +33,9 @@ class Reload(commands.Cog):
                     cog_paths.append(module_path)
         return cog_paths
 
-    # 🔍 Autocomplete do dynamicznych nazw cogów, z podfolderami
+    # ─────────────────────────────────────────
+    # Autocomplete do dynamicznych nazw cogów, z podfolderami
+    # ─────────────────────────────────────────
     async def cog_autocomplete(
         self,
         interaction: discord.Interaction,
@@ -52,13 +57,13 @@ class Reload(commands.Cog):
         try:
             await self.bot.reload_extension(f"cogs.{cog}")
             await interaction.response.send_message(f"✅ Przeładowano `cogs.{cog}`", ephemeral=True)
-            logger.info(f"[✅] Przeładowano cogs.{cog}")
+            logger.success(f"Przeładowano cogs.{cog}")
         except commands.ExtensionNotFound:
             await interaction.response.send_message(f"❌ Nie znaleziono coga `cogs.{cog}`", ephemeral=True)
-            logger.warn(f"[❌] Nie znaleziono coga cogs.{cog}")
+            logger.warn(f"Nie znaleziono coga cogs.{cog}")
         except Exception as e:
             await interaction.response.send_message(f"❌ Błąd przy przeładowywaniu `cogs.{cog}`\n```{e}```", ephemeral=True)
-            logger.error(f"[❌] Błąd przy przeładowywaniu cogs.{cog}\n```{e}```")
+            logger.error(f"Błąd przy przeładowywaniu cogs.{cog}\n```{e}```")
 
 async def setup(bot):
     await bot.add_cog(Reload(bot))
