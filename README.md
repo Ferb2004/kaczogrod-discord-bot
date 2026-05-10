@@ -1,5 +1,5 @@
 > [!NOTE]
-> Chwilowo development prowadzony jest mocno w kratkę.
+> Chwilowo development prowadzony jest w kratkę.
 # Spis treści
 - [O projekcie](#o-projekcie)
 
