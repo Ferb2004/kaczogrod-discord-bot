@@ -16,8 +16,6 @@ Luźny projekt.
 
 Plik compose
 ```
-version: '3'
-
 services:
   kaczogrod-discord-bot:
     image:
@@ -42,8 +40,6 @@ DISCORD_TOKEN=
 
 Plik compose
 ```
-version: '3'
-
 services:
   kaczogrod-discord-bot:
     build:
