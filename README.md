@@ -43,7 +43,7 @@ Plik compose
 services:
   kaczogrod-discord-bot:
     build:
-      context: https://github.com/Ferb2004/kaczogrod-discord-bot.git
+      context: https://github.com/Ferb2004/kaczogrod-discord-bot.git#main
     container_name: discord-bot
     restart: unless-stopped
     env_file:
