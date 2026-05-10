@@ -2,12 +2,13 @@ import discord
 from discord.ext import commands, tasks
 from discord import app_commands, TextChannel
 
-from logger import logger
+from logger import logger, get_logger, log_cog_loaded
 import traceback
 
 from config import UpdateGuildConfig, GetGuildConfig
 
 
+logger = get_logger(__name__)
 #TODO zrobić osobne funkcje dla liczenia online i botów, żeby mogły działać nie zależnie od siebie
 #TODO uporządkować kod
 
