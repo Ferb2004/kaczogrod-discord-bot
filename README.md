@@ -36,7 +36,8 @@ DISCORD_TOKEN=
 
 ### Własne budowanie obrazu
 > [!CAUTION]
-> Nie zalecane i robione na własną odpowiedzialność.  
+> Nie zalecane i robione na własną odpowiedzialność.
+
 Plik compose
 ```
 version: '3'
