@@ -2,9 +2,13 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from logger import logger
+from logger import logger, get_logger, log_cog_loaded
 
 import random
+
+
+logger = get_logger(__name__)
+
 
 class Moneta(commands.Cog):
     def __init__(self, bot):
@@ -13,7 +17,7 @@ class Moneta(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logger.info(f"{__name__} działa.")
+        log_cog_loaded(__name__)
 
 
     @app_commands.command(name="moneta", description="Rzut monetą.")
