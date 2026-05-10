@@ -58,4 +58,6 @@ Plik .env
 DISCORD_TOKEN=
 ```
 # Funkcje
+- [x] Komenda do rzutu monetą.
+- [x] Komenda do przekierowania na githuba.
 - [x] Kanały do liczenia członków online oraz botów na serwerze.
