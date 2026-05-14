@@ -17,9 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Kopiowanie kodu źródłowego bota do obrazu kontenera
 COPY . .
 
-RUN mkdir -p /app/logs \
-    && adduser -D -H -u 1000 appuser \
-    && chown -R appuser:appuser /app  # <-- to musi być PO COPY
+RUN adduser -D -H -u 1000 appuser \
+    && mkdir -p /app/logs \
+    && chown -R appuser:appuser /app
 
 USER appuser
 
