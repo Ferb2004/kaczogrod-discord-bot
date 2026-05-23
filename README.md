@@ -11,8 +11,7 @@
 Luźny projekt.
 
 # Jak zacząć
-> [!CAUTION]
-> Można używać, ale parę rzeczy jeszcze nie działa tak dobrze jak bym chciał.
+---
 ### Docker Compose
 
 Plik compose
