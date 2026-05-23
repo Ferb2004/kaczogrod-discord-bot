@@ -3,6 +3,7 @@
 
 - [Jak zacząć](#jak-zaczac)
   - [Docker Compose](#docker-compose)
+  - [Plik .env](#plik-.env)
   - [Własne budowanie obrazu](#wlasne-budowanie-obrazu)
 - [Funkcje](#funkcje)
 # O projekcie
