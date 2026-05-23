@@ -3,7 +3,9 @@ from discord.ext import commands
 from discord import app_commands
 
 from logger import logger, get_logger, log_cog_loaded
+from embeds import ping_embed, error_embed
 
+from datetime import datetime
 
 logger = get_logger(__name__)
 
@@ -18,13 +20,13 @@ class Ping(commands.Cog):
 
     @app_commands.command(name="ping", description="Pokazuje opóźnienie bota.")
     async def ping(self, interaction: discord.Interaction):
-        embed = discord.Embed(
-            title=f"{round(self.bot.latency * 1000)} ms", # Mnożywy * 1000, żeby wynik był w ms, a nie sekundach
-            color=discord.Color.green()
-        )
-        embed.set_author(name="Ping")
-
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.defer(ephemeral=True)
+        try:
+            ping = round(self.bot.latency * 1000) # Mnożywy * 1000, żeby wynik był w ms
+            await interaction.followup.send(embed=ping_embed(ping))
+        except Exception as e:
+            embed, view = error_embed(e)
+            await interaction.followup.send(embed=embed, view= view, ephemeral=True)
 
 
 

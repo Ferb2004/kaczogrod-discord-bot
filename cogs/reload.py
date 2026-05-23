@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord import app_commands
 
 from logger import logger, get_logger, log_cog_loaded
+from embeds import reload_succesful_embed, reload_failed_embed
 
 import os
 
@@ -49,21 +50,26 @@ class Reload(commands.Cog):
         ]
         return filtered[:25]
 
+    # ─────────────────────────────────────────
+    # Komenda
+    # ─────────────────────────────────────────
     @app_commands.command(name="reload", description="Odświeża coga.")
     @app_commands.checks.has_permissions(administrator=True)
     @app_commands.describe(cog="Nazwa coga do przeładowania (np. admin.moderation)")
     @app_commands.autocomplete(cog=cog_autocomplete)
     async def reload(self, interaction: discord.Interaction, cog: str):
+        await interaction.response.defer(ephemeral=True)
         try:
             await self.bot.reload_extension(f"cogs.{cog}")
-            await interaction.response.send_message(f"✅ Przeładowano `cogs.{cog}`", ephemeral=True)
+            await interaction.followup.send(embed = reload_succesful_embed(cog), ephemeral=True)
             logger.success(f"Przeładowano cogs.{cog}")
         except commands.ExtensionNotFound:
             await interaction.response.send_message(f"❌ Nie znaleziono coga `cogs.{cog}`", ephemeral=True)
             logger.warn(f"Nie znaleziono coga cogs.{cog}")
         except Exception as e:
-            await interaction.response.send_message(f"❌ Błąd przy przeładowywaniu `cogs.{cog}`\n```{e}```", ephemeral=True)
-            logger.error(f"Błąd przy przeładowywaniu cogs.{cog}\n```{e}```")
+            embed, view = reload_failed_embed(cog, e)
+            await interaction.followup.send(embed=embed, view=view, ephemeral=True)
+            logger.error(f"Błąd przy przeładowywaniu coga {cog}.", exc_info=e)
 
 async def setup(bot):
     await bot.add_cog(Reload(bot))
