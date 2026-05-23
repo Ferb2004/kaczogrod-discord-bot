@@ -18,7 +18,7 @@ Plik compose
 ```
 services:
   kaczogrod-discord-bot:
-    image:
+    image: ghcr.io/ferb2004/kaczogrod-discord-bot:latest
     container_name: discord-bot
     restart: unless-stopped
     env_file:
@@ -28,9 +28,12 @@ services:
       - ./logs:/app/logs
 ```
 
-Plik .env
+### Plik .env
 ```
 DISCORD_TOKEN=
+#---Opcjonalne---
+#Ip serwera minecraft, którego liczba graczy ma być pokazywana.
+IP_SERWERA=
 ```
 ---
 
