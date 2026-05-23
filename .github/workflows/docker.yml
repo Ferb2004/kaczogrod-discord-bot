@@ -3,6 +3,9 @@ name: Build & Push Docker Image
 on:
   release:
     types: [published]
+    
+env:
+  IMAGE_NAME: ghcr.io/ferb2004/kaczogrod-discord-bot
 
 jobs:
   build:
@@ -29,7 +32,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository | lower }}:latest
-            ghcr.io/${{ github.repository | lower }}:${{ github.event.release.tag_name }}
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}
           build-args: |
             IMAGE_DIGEST=${{ steps.push.outputs.digest }}
