@@ -27,6 +27,7 @@ services:
       - ./data:/app/data
       - ./logs:/app/logs
 ```
+---
 
 ### Plik .env
 ```
@@ -52,12 +53,9 @@ services:
       - ./data:/app/data
       - ./logs:/app/logs
 ```
-
-Plik .env
-```
-DISCORD_TOKEN=
-```
 # Funkcje
 - [x] Komenda do rzutu monetą.
 - [x] Komenda do przekierowania na githuba.
 - [x] Kanały do liczenia członków online oraz botów na serwerze.
+- [x] Pokazywanie liczby graczy na serwerze minecraft w statusie.
+- [x] Komenda do wyświetlania informacji o serwerach minecraft.
