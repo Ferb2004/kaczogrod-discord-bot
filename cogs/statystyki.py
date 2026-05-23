@@ -188,7 +188,7 @@ class StatystykiKomendy(app_commands.Group):
         try:
             if nazwa is None:
                 cfg = get_guild_config(interaction.guild.id)
-                stat = cfg.get("statistics")
+                stat = cfg.get("statistics") or {}
                 nazwa = stat.get("channel_online_name")
                 if nazwa is None:
                     nazwa = 'Online: '
@@ -209,7 +209,7 @@ class StatystykiKomendy(app_commands.Group):
         try:
             if nazwa is None:
                 cfg = get_guild_config(interaction.guild.id)
-                stat = cfg.get("statistics")
+                stat = cfg.get("statistics") or {}
                 nazwa = stat.get("channel_members_name")
                 if nazwa is None:
                     nazwa = 'Na serwerze: '
@@ -230,7 +230,7 @@ class StatystykiKomendy(app_commands.Group):
         try:
             if nazwa is None:
                 cfg = get_guild_config(interaction.guild.id)
-                stat = cfg.get("statistics")
+                stat = cfg.get("statistics") or {}
                 nazwa = stat.get("channel_bots_name")
                 if nazwa is None:
                     nazwa = 'Boty: '
