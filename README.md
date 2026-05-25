@@ -35,6 +35,8 @@ DISCORD_TOKEN=
 #---Opcjonalne---
 #Ip serwera minecraft, którego liczba graczy ma być pokazywana.
 IP_SERWERA=
+#Port serwera minecraft. Jeśli nie będzie podany, bot będzie sprawdzał na porcie 25565.
+PORT_SERWERA=
 ```
 ---
 
