@@ -58,7 +58,6 @@ class Status(commands.Cog):
     @tasks.loop(minutes=5)
     async def status_update(self):
         gracze: int | None = None
-        logger.info(f"version={version}, latest={self.latest_version}")
         if server is not None:
             try:
                 mc_status = server.status(tries=5)
@@ -69,11 +68,11 @@ class Status(commands.Cog):
         if gracze == 0 or gracze is None:
             if version is not None:
                 if version == self.latest_version:
-                    status = f"✅{version}"
+                    status = f"✅ {version}"
                 else:
-                    status = f"ℹ️{version} | Dostępna aktualizacja."
+                    status = f"ℹ️ {version} | Dostępna aktualizacja."
             else:
-                status = f"🔨Własna kompilacja"
+                status = f"🔨 Własna kompilacja"
         else:
             status = f"{gracze} gracz{'y' if gracze != 1 else ''} na serwerze {ipSerwera}"
 
