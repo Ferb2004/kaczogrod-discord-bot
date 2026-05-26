@@ -57,9 +57,14 @@ class Status(commands.Cog):
     @tasks.loop(minutes=5)
     async def status_update(self):
         gracze: int | None = None
+        logger.info(f"version={version}, latest={self.latest_version}")
         if server is not None:
-            status = server.status(tries=5)
-            gracze = status.players.online
+            try:
+                mc_status = server.status(tries=5)
+                gracze = mc_status.players.online
+            except (TimeoutError, OSError):
+                gracze = None
+
         if gracze == 0 or gracze is None:
             if version is not None:
                 if version == self.latest_version:
