@@ -33,6 +33,7 @@ class Status(commands.Cog):
         else:
             global server
             server = JavaServer.lookup(f"{ipSerwera}:{portSerwera}")
+        await self.get_latest_version()
         self.get_latest_version.start()
         self.status_update.start()
 
