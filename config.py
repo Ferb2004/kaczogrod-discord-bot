@@ -53,7 +53,7 @@ def get_guild_config(guild_id: int):
             guild_id: Id gildii, której chce dostać się parametry z configu.
 
         Returns:
-            Zwraca parametr gildii z configu.
+            Parametr gildii z configu.
     '''
     data = load_config()
     return data.setdefault("guilds", {}).setdefault(str(guild_id), {})
@@ -141,17 +141,3 @@ def delete_from_guild_config(
         hashed_user,
         note
     )
-
-# ─────────────────────────────────────────
-# Funkcje do zarządzania hashem commitu
-# ─────────────────────────────────────────
-def GetStoredCommit() -> str | None:
-    data = load_config()
-    return data.get("meta", {}).get("last_commit")
-
-
-def SetStoredCommit(commit_sha: str):
-    data = load_config()
-    meta = data.setdefault("meta", {})
-    meta["last_commit"] = commit_sha
-    save_config(data)
