@@ -1,7 +1,8 @@
 <p align="center">
-<a href="https://github.com/ferb2004/kaczogrod-discord-bot/releases"><img src="https://img.shields.io/badge/dynamic/json?url=https://codeberg.org/api/v1/repos/ferb2004/ducky/releases/latest&query=$.tag_name&label=release&style=for-the-badge&color=2496ED" alt="Latest release"></a>
-  <a href="https://github.com/ferb2004/kaczogrod-discord-bot/pkgs/container/kaczogrod-discord-bot"><img src="https://img.shields.io/badge/docker-available-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker image"></a>
+  <a href="https://github.com/Ferb2004/kaczogrod-discord-bot/releases"><img src="https://img.shields.io/github/v/release/Ferb2004/kaczogrod-discord-bot?style=for-the-badge&color=2496ED&label=release" alt="Latest release"></a>
+  <a href="https://github.com/Ferb2004/kaczogrod-discord-bot/pkgs/container/kaczogrod-discord-bot"><img src="https://img.shields.io/badge/docker-available-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker image"></a>
 </p>
+
 <p align="center">
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/badge/ruff-%23D7FF64?style=for-the-badge&logo=ruff&logoColor=black" alt="Ruff"></a>
   <a href="https://github.com/astral-sh/uv"><img alt="uv" src="https://img.shields.io/badge/uv-%23DE5FE9.svg?style=for-the-badge&logo=uv&logoColor=white"></a>
