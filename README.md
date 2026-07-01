@@ -44,6 +44,7 @@ services:
 ### Plik .env
 ```
 DISCORD_TOKEN=
+
 #---Opcjonalne---
 #Ip serwera minecraft, którego liczba graczy ma być pokazywana.
 IP_SERWERA=
