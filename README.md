@@ -1,4 +1,8 @@
 <p align="center">
+<img src="./media/baner.jpeg" alt="Baner" width="400">
+</p>
+
+<p align="center">
   <a href="https://github.com/Ferb2004/kaczogrod-discord-bot/releases"><img src="https://img.shields.io/github/v/release/Ferb2004/kaczogrod-discord-bot?style=for-the-badge&color=2496ED&label=release" alt="Latest release"></a>
   <a href="https://github.com/Ferb2004/kaczogrod-discord-bot/pkgs/container/kaczogrod-discord-bot"><img src="https://img.shields.io/badge/docker-available-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker image"></a>
 </p>
