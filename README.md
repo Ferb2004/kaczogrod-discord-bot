@@ -29,8 +29,6 @@ Luźny projekt.
 # Jak zacząć
 
 ### Docker Compose
-
-Plik compose
 ```
 services:
   kaczogrod-discord-bot:
