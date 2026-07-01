@@ -56,7 +56,6 @@ PORT_SERWERA=
 ---
 
 ### Własne budowanie obrazu
-Plik compose
 ```
 services:
   kaczogrod-discord-bot:
