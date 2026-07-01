@@ -1,0 +1,10 @@
+services:
+  kaczogrod-discord-bot:
+    image: ghcr.io/ferb2004/kaczogrod-discord-bot:latest
+    container_name: discord-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
