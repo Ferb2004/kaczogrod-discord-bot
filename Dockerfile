@@ -1,21 +1,23 @@
 FROM python:3.14-alpine
 
+COPY --from=ghcr.io/astral-sh/uv:0.11.26 /uv /uvx /bin/
+
 ARG IMAGE_DIGEST=unknown
 ENV IMAGE_DIGEST=$IMAGE_DIGEST
 
-# Ustawienie zmiennej środowiskowej do uniezależnienia bot od zmian w ścieżkach
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-# Tworzenie katalogu roboczego w obrazie kontenera
 WORKDIR /app
 
-# Instalacja wymaganych zależności z pliku requirements.txt (przed kopiowaniem kodu)
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Ustawienie zmiennej środowiskowej do uniezależnienia bot od zmian w ścieżkach
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_COMPILE_BYTECODE=1
+
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-install-project
 
 # Kopiowanie kodu źródłowego bota do obrazu kontenera
 COPY . .
+RUN uv sync --frozen
 
 # Wykazanie komendy uruchamiania bota podczas startowania kontenera
-CMD ["python", "./app.py"]
+CMD ["uv", "run", "python", "./app.py"]
