@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from logger import logger, get_logger
+from utils.logger import logger, get_logger
 
 from dotenv import load_dotenv
 import os
@@ -13,13 +13,12 @@ logger = get_logger(__name__)
 
 
 load_dotenv()
-TOKEN: str = os.getenv("DISCORD_TOKEN")
+TOKEN = os.getenv("DISCORD_TOKEN")
 if not TOKEN:
-    logger.critical("Brak zmiennej środowiskowej DISCORD_TOKEN!")
-    exit(1)
+    raise RuntimeError("Brak zmiennej środowiskowej DISCORD_TOKEN!")
 
 # Mimo, że "command_prefix" nie jest nigdzie
-# wykorzystywane, to bez tego bot się nie odpala.
+# wykorzystywane, to bez tego bot się nie uruchamia.
 bot = commands.Bot(command_prefix="$", intents=discord.Intents.all())
 
 
@@ -29,9 +28,9 @@ def global_exception_handler(exc_type, exc_value, exc_traceback):
         return
 
     logger.critical(
-        "Nieobsłużony wyjątek globalny",
-        exc_info=(exc_type, exc_value, exc_traceback)
+        "Nieobsłużony wyjątek globalny", exc_info=(exc_type, exc_value, exc_traceback)
     )
+
 
 sys.excepthook = global_exception_handler
 
@@ -68,9 +67,11 @@ async def load():
         if filename.endswith(".py"):
             try:
                 await bot.load_extension(f"cogs.{filename[:-3]}")
-                logger.success(f'cogs.{filename[:-3]} załadowany.')
+                logger.success(f"cogs.{filename[:-3]} załadowany.")
             except Exception as e:
-                logger.error(f"Nie udało się załadować coga {filename}: \n {e}", exc_info=True)
+                logger.error(
+                    f"Nie udało się załadować coga {filename}: \n {e}", exc_info=True
+                )
 
 
 async def main():
