@@ -2,3 +2,5 @@
 .github
 README.md
 media
+dockercompose.yaml
+dockercompose-self-building.yaml
