@@ -1,9 +1,6 @@
-FROM python:3.14.6-slim
+FROM python:3.14.6-bookworm AS builder
 
-COPY --from=ghcr.io/astral-sh/uv:0.11.28 /uv /uvx /bin/
-
-ARG IMAGE_DIGEST=unknown
-ENV IMAGE_DIGEST=$IMAGE_DIGEST
+COPY --from=ghcr.io/astral-sh/uv:0.12.1 /uv /uvx /bin/
 
 WORKDIR /app
 
@@ -15,15 +12,22 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-install-project --no-dev
 
-# Kopiowanie kodu źródłowego bota do obrazu kontenera
 COPY . .
 RUN uv sync --frozen --no-dev
 
-RUN useradd --create-home --shell /usr/sbin/nologin botuser \
-    && mkdir -p /app/data /app/logs \
-    && chown -R botuser:botuser /app/data /app/logs
+FROM gcr.io/distroless/cc-debian12:nonroot AS production
 
-USER botuser
+ARG IMAGE_DIGEST=unknown
+ENV IMAGE_DIGEST=$IMAGE_DIGEST \
+    PATH="/app/.venv/bin:/usr/local/bin:$PATH" \
+    PYTHONPATH="/app/.venv/lib/python3.14/site-packages"
 
-# Wykazanie komendy uruchamiania bota podczas startowania kontenera
-CMD ["uv", "run", "python", "./app.py"]
+WORKDIR /app
+
+COPY --from=builder /usr/local/lib/python3.14 /usr/local/lib/python3.14
+COPY --from=builder /usr/local/bin/python3.14 /usr/local/bin/python3.14
+COPY --from=builder /app /app
+
+USER nonroot
+
+CMD ["/app/.venv/bin/python3", "./app.py"]
