@@ -1,6 +1,6 @@
 FROM python:3.14.6-bookworm AS builder
 
-COPY --from=ghcr.io/astral-sh/uv:0.12.1 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.12.2 /uv /uvx /bin/
 
 WORKDIR /app
 
