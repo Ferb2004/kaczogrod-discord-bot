@@ -16,11 +16,12 @@
 # Spis treści
 - [O projekcie](#o-projekcie)
 
-- [Jak zacząć](#jak-zaczac)
+- [Jak zacząć](#jak-zacząć)
   - [Docker Compose](#docker-compose)
-  - [Plik .env](#plik-.env)
-  - [Własne budowanie obrazu](#wlasne-budowanie-obrazu)
+  - [Plik .env](#plik-env)
+  - [Własne budowanie obrazu](#własne-budowanie-obrazu)
 - [Funkcje](#funkcje)
+- [Planowane funkcje](#planowane-funkcje)
 # O projekcie
 
 Luźny projekt.
@@ -75,3 +76,10 @@ services:
 - [x] Kanały do liczenia członków online oraz botów na serwerze.
 - [x] Pokazywanie liczby graczy na serwerze minecraft w statusie.
 - [x] Komenda do wyświetlania informacji o serwerach minecraft.
+- [x] Wysyłanie feedów RSS/Atom.
+- [x] Nadawanie roli użytkownikom przy dołączeniu na serwer.
+- [x] Role, które użytkownicy mogą sami sobie wybrać.
+
+# Planowane funkcje
+- Puszczanie muzyki.
+- Tymczasowe kanały.
