@@ -71,14 +71,14 @@ services:
       - ./logs:/app/logs
 ```
 # Funkcje
-- [x] Komenda do rzutu monetą.
-- [x] Komenda do przekierowania na githuba.
-- [x] Kanały do liczenia członków online oraz botów na serwerze.
-- [x] Pokazywanie liczby graczy na serwerze minecraft w statusie.
-- [x] Komenda do wyświetlania informacji o serwerach minecraft.
-- [x] Wysyłanie feedów RSS/Atom.
-- [x] Nadawanie roli użytkownikom przy dołączeniu na serwer.
-- [x] Role, które użytkownicy mogą sami sobie wybrać.
+-  Komenda do rzutu monetą.
+-  Komenda do przekierowania na githuba.
+-  Kanały do liczenia członków online oraz botów na serwerze.
+-  Pokazywanie liczby graczy na serwerze minecraft w statusie.
+-  Komenda do wyświetlania informacji o serwerach minecraft.
+-  Wysyłanie feedów RSS/Atom.
+-  Nadawanie roli użytkownikom przy dołączeniu na serwer.
+-  Role, które użytkownicy mogą sami sobie wybrać.
 
 # Planowane funkcje
 - Puszczanie muzyki.
