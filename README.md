@@ -53,6 +53,8 @@ DISCORD_TOKEN=
 IP_SERWERA=
 #Port serwera minecraft. Jeśli nie będzie podany, bot będzie sprawdzał na porcie 25565.
 PORT_SERWERA=
+#Więcej informacji w logach.
+LOG_LEVEL=DEBUG
 ```
 ---
 
