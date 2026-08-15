@@ -59,7 +59,7 @@ LOG_LEVEL=DEBUG
 ```
 ---
 
-### Własne budowanie obrazu
+### Budowanie własnego obrazu
 ```
 services:
   kaczogrod-discord-bot:
