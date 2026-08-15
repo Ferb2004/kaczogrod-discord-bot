@@ -16,7 +16,7 @@
 # Spis treści
 - [O projekcie](#o-projekcie)
 
-- [Jak zacząć](#jak-zacząć)
+- [Instalacja](#instalacja)
   - [Docker Compose](#docker-compose)
   - [Plik .env](#plik-env)
   - [Własne budowanie obrazu](#własne-budowanie-obrazu)
@@ -27,7 +27,7 @@
 Luźny projekt.
 
 
-# Jak zacząć
+# Instalacja
 
 ### Docker Compose
 ```
