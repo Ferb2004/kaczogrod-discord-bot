@@ -22,9 +22,10 @@
   - [Własne budowanie obrazu](#własne-budowanie-obrazu)
 - [Funkcje](#funkcje)
 - [Planowane funkcje](#planowane-funkcje)
+- [Checki](#checki)
 # O projekcie
 
-Luźny projekt.
+Self hostowalny bot discord. Zrobiłem własnego, bo miałem dość głosowania na jakiś stronach oraz nie chciałem płacić, żeby odblokować jakąś funkcjonalność.
 
 
 # Instalacja
@@ -85,3 +86,10 @@ services:
 # Planowane funkcje
 - Puszczanie muzyki.
 - Tymczasowe kanały.
+
+
+# Checki
+Checki, które projekt przechodzi.
+- `ruff format --check .`
+- `ruff check .`
+- `pyright .`
