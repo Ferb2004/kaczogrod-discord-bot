@@ -1,9 +1,9 @@
+import hashlib
+import inspect
 import json
 import os
-import inspect
-import hashlib
-from utils.logger import logger, get_logger
 
+from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -37,7 +37,7 @@ def load_config():
             if not content:
                 return {"guilds": {}}
             return json.loads(content)
-    except json.JSONDecodeError as e:
+    except json.JSONDecodeError:
         logger.error("[CONFIG] ❌ Uszkodzony config.json — reset do domyślnego")
         return {"guilds": {}}
 
@@ -101,7 +101,7 @@ def update_guild_config(
         else "unknown"
     )
 
-    logger.info(
+    logger.debug(
         "Config zmieniony | guild=%s | source=%s | updates=%s | hashed_user=%s | note=%s",
         guild_id,
         source,
@@ -153,3 +153,101 @@ def delete_from_guild_config(
         hashed_user,
         note,
     )
+
+
+def add_rss_feed(
+    guild_id: int, feed_url: str, channel_id: int, *, user_id: int | None = None
+):
+    """Dodaje nowy feed RSS/Atom do configu gildii."""
+    cfg = get_guild_config(guild_id)
+    feeds = cfg.get("rss", [])
+
+    feeds.append(
+        {
+            "feed_url": feed_url,
+            "channel_id": channel_id,
+            "last_entry_id": None,
+            "etag": None,
+            "modified": None,
+        }
+    )
+
+    update_guild_config(
+        guild_id, {"rss": feeds}, user_id=user_id, note=f"Dodano feed {feed_url}"
+    )
+
+
+def remove_rss_feed(
+    guild_id: int, feed_url: str, channel_id, *, user_id: int | None = None
+):
+    """Usuwa feed RSS/Atom z configu gildii po URL oraz ID kanału."""
+    cfg = get_guild_config(guild_id)
+    feeds = cfg.get("rss", [])
+
+    feeds = [
+        f
+        for f in feeds
+        if not (f.get("feed_url") == feed_url and f.get("channel_id") == channel_id)
+    ]
+
+    update_guild_config(
+        guild_id, {"rss": feeds}, user_id=user_id, note=f"Usunięto feed {feed_url}"
+    )
+
+
+def update_rss_feed_state(guild_id: int, feed_url: str, **state_updates):
+    """Aktualizuje stan konkretnego feeda (np. last_entry_id, etag, modified)."""
+    cfg = get_guild_config(guild_id)
+    feeds = cfg.get("rss", [])
+
+    for feed in feeds:
+        if feed.get("feed_url") == feed_url:
+            feed.update(state_updates)
+            break
+
+    update_guild_config(guild_id, {"rss": feeds})
+
+
+def add_getrole_role(
+    guild_id: int,
+    role_name: str,
+    role_id: int,
+    description: str | None = None,
+    emoji: str | None = None,
+    *,
+    user_id: int | None = None,
+):
+    """Dodaje nową rolę do configu gildii."""
+    cfg = get_guild_config(guild_id)
+    getrole_cfg = cfg.get("getrole", {})
+    roles = getrole_cfg.get("roles", [])
+
+    if any(r.get("role_id") == role_id for r in roles):
+        raise ValueError("Ta rola jest już dodana do listy.")
+
+    roles.append(
+        {
+            "role_name": role_name,
+            "role_id": role_id,
+            "description": description,
+            "emoji": emoji,
+        }
+    )
+
+    update_guild_config(
+        guild_id,
+        {"getrole": {"roles": roles}},
+        user_id=user_id,
+        note=f"Dodano rolę {role_name}",
+    )
+
+
+def remove_getrole_role(guild_id: int, role_id: int, *, user_id: int | None = None):
+    """Usuwa rolę z configu gildii po ID."""
+    cfg = get_guild_config(guild_id)
+    getrole_cfg = cfg.get("getrole", {})
+    roles = getrole_cfg.get("roles", [])
+
+    roles = [f for f in roles if f.get("role_id") != role_id]
+
+    update_guild_config(guild_id, {"getrole": {"roles": roles}}, user_id=user_id)

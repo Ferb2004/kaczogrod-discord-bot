@@ -1,11 +1,12 @@
+import calendar
+import logging
+from datetime import UTC, datetime
+
 import discord
+from discord.ext import commands
 from discord.utils import format_dt
-from datetime import datetime
 
-from utils.logger import logger, get_logger
-
-
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class ReloadView(discord.ui.View):
@@ -15,20 +16,21 @@ class ReloadView(discord.ui.View):
 
     @discord.ui.button(label="Spróbuj ponownie", emoji="🔄")
     async def reload(self, interaction: discord.Interaction, button: discord.ui.Button):
-        # Edytuj obecną wiadomość na "ładowanie"
         loading_embed = discord.Embed(
             description="⏳ Przeładowywanie...", colour=discord.Color.yellow()
         )
         await interaction.response.edit_message(embed=loading_embed, view=None)
 
         try:
+            if not isinstance(interaction.client, commands.Bot):
+                return
             await interaction.client.reload_extension(f"cogs.{self.cog}")
-            logger.success(f"Przeładowano cogs.{self.cog}")
+            logger.info(f"Przeładowano cogs.{self.cog}")
             await interaction.edit_original_response(
                 embed=reload_succesful_embed(self.cog), view=None
             )
         except Exception as e:
-            logger.error(f"Błąd przy przeładowywaniu coga {self.cog}.", exc_info=True)
+            logger.exception(f"Błąd przy przeładowywaniu coga {self.cog}.")
             embed, view = reload_failed_embed(self.cog, e)
             await interaction.edit_original_response(embed=embed, view=view)
 
@@ -37,7 +39,7 @@ def error_embed(e: Exception) -> tuple[discord.Embed, discord.ui.View]:
     embed = discord.Embed(
         description=f"```\n{e}\n```",
         colour=discord.Color.red(),
-        timestamp=datetime.now(),
+        timestamp=datetime.now(UTC),
     )
     embed.set_author(name="❌ Wystąpił problem")
 
@@ -54,7 +56,7 @@ def error_embed(e: Exception) -> tuple[discord.Embed, discord.ui.View]:
 
 def custom_error_embed(tekst: str) -> tuple[discord.Embed, discord.ui.View]:
     embed = discord.Embed(
-        description=tekst, colour=discord.Color.red(), timestamp=datetime.now()
+        description=tekst, colour=discord.Color.red(), timestamp=datetime.now(UTC)
     )
     embed.set_author(name="❌ Wystąpił problem")
 
@@ -75,18 +77,18 @@ def reload_failed_embed(
     embed = discord.Embed(
         description=f"```\n{e}\n```",
         colour=discord.Color.red(),
-        timestamp=datetime.now(),
+        timestamp=datetime.now(UTC),
     )
     embed.set_author(name="❌ Błąd przy przeładowywaniu coga.")
 
     return embed, ReloadView(cog)
 
 
-def reload_succesful_embed(cog: str) -> tuple[discord.Embed]:
+def reload_succesful_embed(cog: str) -> discord.Embed:
     embed = discord.Embed(
         description=f"```\n{cog}\n```",
         colour=discord.Color.green(),
-        timestamp=datetime.now(),
+        timestamp=datetime.now(UTC),
     )
 
     embed.set_author(name="✅ Przeładowano!")
@@ -94,8 +96,8 @@ def reload_succesful_embed(cog: str) -> tuple[discord.Embed]:
     return embed
 
 
-def config_embed(what_changed: str, value) -> tuple[discord.Embed]:
-    embed = discord.Embed(colour=discord.Color.green(), timestamp=datetime.now())
+def config_embed(what_changed: str, value) -> discord.Embed:
+    embed = discord.Embed(colour=discord.Color.green(), timestamp=datetime.now(UTC))
     embed.add_field(name=what_changed, value=value, inline=True)
 
     embed.set_author(name="✅ Config zaktualizowany")
@@ -103,19 +105,21 @@ def config_embed(what_changed: str, value) -> tuple[discord.Embed]:
     return embed
 
 
-def ping_embed(ping: str) -> tuple[discord.Embed]:
+def ping_embed(ping: str) -> discord.Embed:
     embed = discord.Embed(
-        title=f"{ping} ms", color=discord.Color.green(), timestamp=datetime.now()
+        title=f"{ping} ms", color=discord.Color.green(), timestamp=datetime.now(UTC)
     )
     embed.set_author(name="Ping")
 
+    return embed
 
-def minecraftserverinfo_success_embed(ip, port, players, motd, version) -> tuple[discord.Embed, discord.ui.View]:
-    embed = discord.Embed(
-        colour=discord.Colour.green(),
-    )
+
+def minecraftserverinfo_success_embed(
+    ip, port, players, motd, version, has_icon: bool = True
+) -> tuple[discord.Embed, discord.ui.View]:
+    embed = discord.Embed(colour=discord.Colour.green())
     embed.set_author(
-        name=f"Informacje o serwerze Minecraft",
+        name="Informacje o serwerze Minecraft",
         icon_url="https://cdn.jsdelivr.net/gh/selfhst/icons/png/minecraft-creeper.png",
     )
 
@@ -125,7 +129,8 @@ def minecraftserverinfo_success_embed(ip, port, players, motd, version) -> tuple
     embed.add_field(name="MOTD", value=motd, inline=False)
     embed.add_field(name="Wersja", value=version, inline=False)
 
-    embed.set_thumbnail(url="attachment://favicon.png")
+    if has_icon:
+        embed.set_thumbnail(url="attachment://favicon.png")
 
     embed.set_footer(
         text="Dane dostarczane przez MCStatus.io",
@@ -139,12 +144,12 @@ def minecraftserverinfo_success_embed(ip, port, players, motd, version) -> tuple
 
 def minecraftserverinfo_failed_embed() -> tuple[discord.Embed, discord.ui.View]:
     embed = discord.Embed(
-        description=f"Nie udało się pobrać danych na temat serwera.",
+        description="Nie udało się pobrać danych na temat serwera.",
         colour=discord.Colour.red(),
-        timestamp=datetime.now(),
+        timestamp=datetime.now(UTC),
     )
     embed.set_author(
-        name=f"❌ Wystąpił błąd.",
+        name="❌ Wystąpił błąd.",
         icon_url="https://cdn.jsdelivr.net/gh/selfhst/icons/png/minecraft-creeper.png",
     )
     embed.set_footer(
@@ -162,28 +167,38 @@ def minecraftserverinfo_failed_embed() -> tuple[discord.Embed, discord.ui.View]:
     return embed, view
 
 
-def github_embed(name, description, language,  stars, latest_version, published_at, issues, last_push) -> tuple[discord.Embed, discord.ui.View]:
-    embed = discord.Embed(colour=0xFFFFFF)
+def github_embed(
+    name, description, language, stars, latest_version, published_at, issues, last_push
+) -> tuple[discord.Embed, discord.ui.View]:
+    embed = discord.Embed(
+        colour=0xFFFFFF,
+        title=name,
+        description=description,
+        timestamp=datetime.now(UTC),
+    )
     embed.set_author(
-        name=f"Github",
+        name="Github",
         url="https://github.com/Ferb2004/kaczogrod-discord-bot",
         icon_url="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",
     )
 
-    embed.add_field(name="Nazwa", value=name, inline=False)
-    embed.add_field(name="Opis", value=description, inline=False)
     embed.add_field(name="Język", value=language, inline=False)
     embed.add_field(name="Gwiazdki", value=stars, inline=False)
-    embed.add_field(name="Ostatnie wydanie", value=f"**{latest_version}** wydane {format_dt(published_at, style='f')} {format_dt(published_at, style='R')}", inline=False)
+    embed.add_field(
+        name="Ostatnie wydanie",
+        value=f"**{latest_version}** wydane {format_dt(published_at, style='f')} {format_dt(published_at, style='R')}",
+        inline=False,
+    )
     embed.add_field(name="Otwarte issues", value=issues, inline=False)
-    embed.add_field(name="Ostatni commit", value=format_dt(last_push, style='R'), inline=False)
+    embed.add_field(
+        name="Ostatni commit", value=format_dt(last_push, style="R"), inline=False
+    )
 
     view = discord.ui.View()
 
     view.add_item(
         discord.ui.Button(
-            label="GitHub",
-            url="https://github.com/Ferb2004/kaczogrod-discord-bot"
+            label="GitHub", url="https://github.com/Ferb2004/kaczogrod-discord-bot"
         )
     )
 
@@ -200,4 +215,53 @@ def github_embed(name, description, language,  stars, latest_version, published_
             url="https://github.com/Ferb2004/kaczogrod-discord-bot/releases",
         )
     )
+    return embed, view
+
+
+def rss_embed(
+    feed_title,
+    feed_link,
+    feed_icon,
+    article_link,
+    article_title,
+    article_image_url,
+    description,
+    author,
+    published_at,
+) -> tuple[discord.Embed, discord.ui.View]:
+
+    embed = discord.Embed(
+        colour=0xFF8801,
+        timestamp=datetime.now(UTC),
+        title=article_title,
+        description=description,
+    )
+    embed.set_author(
+        name=feed_title,
+        url=feed_link,
+        icon_url=feed_icon,
+    )
+
+    embed.set_image(url=article_image_url)
+    embed.add_field(name="Autor", value=author, inline=False)
+
+    if published_at is not None:
+        timestamp = calendar.timegm(published_at)
+        embed.add_field(
+            name="Data publikacji",
+            value=format_dt(datetime.fromtimestamp(timestamp, tz=UTC), style="f"),
+            inline=False,
+        )
+
+    embed.set_footer(
+        text="RSS/Atom",
+        icon_url="https://cdn.iconscout.com/icon/free/png-512/free-rss-logo-icon-svg-download-png-2284902.png?f=webp&w=256",
+    )
+
+    view = discord.ui.View()
+
+    view.add_item(discord.ui.Button(label="Zobacz stronę główną", url=feed_link))
+
+    view.add_item(discord.ui.Button(label="Czytaj artykuł", url=article_link))
+
     return embed, view
