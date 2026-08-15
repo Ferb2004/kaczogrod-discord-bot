@@ -1,25 +1,30 @@
-import discord
-from discord.ext import commands
-
-from logger import logger, get_logger
-
-from dotenv import load_dotenv
-import os
 import asyncio
+import os
 import sys
 
+import discord
+from discord.ext import commands
+from dotenv import load_dotenv
+
+from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
 
 load_dotenv()
-TOKEN: str = os.getenv("DISCORD_TOKEN")
-if not TOKEN:
-    logger.critical("Brak zmiennej środowiskowej DISCORD_TOKEN!")
-    exit(1)
+
+
+def get_token() -> str:
+    token = os.getenv("DISCORD_TOKEN")
+    if not token:
+        raise RuntimeError("Brak zmiennej środowiskowej DISCORD_TOKEN!")
+    return token
+
+
+TOKEN = get_token()
 
 # Mimo, że "command_prefix" nie jest nigdzie
-# wykorzystywane, to bez tego bot się nie odpala.
+# wykorzystywane, to bez tego bot się nie uruchamia.
 bot = commands.Bot(command_prefix="$", intents=discord.Intents.all())
 
 
@@ -29,14 +34,14 @@ def global_exception_handler(exc_type, exc_value, exc_traceback):
         return
 
     logger.critical(
-        "Nieobsłużony wyjątek globalny",
-        exc_info=(exc_type, exc_value, exc_traceback)
+        "Nieobsłużony wyjątek globalny", exc_info=(exc_type, exc_value, exc_traceback)
     )
+
 
 sys.excepthook = global_exception_handler
 
 
-def asyncio_exception_handler(loop, context):
+def asyncio_exception_handler(_loop, context):
     exception = context.get("exception")
     message = context.get("message")
 
@@ -48,14 +53,14 @@ def asyncio_exception_handler(loop, context):
 
 @bot.event
 async def on_ready():
-    logger.success("Bot gotowy!")
+    logger.info("Bot gotowy!")
     try:
         synced_commands = await bot.tree.sync()
         logger.info(f"Liczba zsynchronizowanych komend: {len(synced_commands)}")
         for cmd in synced_commands:
             logger.info(f"- {cmd.name}")
-    except Exception as e:
-        logger.error(f"Problem z synchoronizacją komend: \n {e}")
+    except Exception:
+        logger.exception("Problem z synchoronizacją komend:")
 
 
 @bot.event
@@ -68,9 +73,9 @@ async def load():
         if filename.endswith(".py"):
             try:
                 await bot.load_extension(f"cogs.{filename[:-3]}")
-                logger.success(f'cogs.{filename[:-3]} załadowany.')
-            except Exception as e:
-                logger.error(f"Nie udało się załadować coga {filename}: \n {e}", exc_info=True)
+                logger.info(f"cogs.{filename[:-3]} załadowany.")
+            except Exception:
+                logger.exception(f"Nie udało się załadować coga {filename}:")
 
 
 async def main():

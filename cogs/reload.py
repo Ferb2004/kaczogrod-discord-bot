@@ -1,12 +1,11 @@
-import discord
-from discord.ext import commands
-from discord import app_commands
-
-from logger import logger, get_logger, log_cog_loaded
-from embeds import reload_succesful_embed, reload_failed_embed
-
 import os
 
+import discord
+from discord import app_commands
+from discord.ext import commands
+
+from utils.embeds import reload_failed_embed, reload_succesful_embed
+from utils.logger import get_logger, log_cog_loaded
 
 logger = get_logger(__name__)
 
@@ -28,9 +27,12 @@ class Reload(commands.Cog):
             for file in files:
                 if file.endswith(".py") and not file.startswith("_"):
                     full_path = os.path.join(root, file)
-                    module_path = full_path.replace("/", ".").replace("\\", ".")[:-3]  # zamiana ścieżki na moduł
-                    if module_path.startswith("cogs."):
-                        module_path = module_path[5:]  # usuwamy "cogs." z początku
+                    module_path = full_path.replace("/", ".").replace("\\", ".")[
+                        :-3
+                    ]  # zamiana ścieżki na moduł
+                    module_path = module_path.removeprefix(
+                        "cogs."
+                    )  # usuwamy "cogs." z początku
                     cog_paths.append(module_path)
         return cog_paths
 
@@ -38,9 +40,7 @@ class Reload(commands.Cog):
     # Autocomplete do dynamicznych nazw cogów, z podfolderami
     # ─────────────────────────────────────────
     async def cog_autocomplete(
-        self,
-        interaction: discord.Interaction,
-        current: str
+        self, interaction: discord.Interaction, current: str
     ) -> list[app_commands.Choice[str]]:
         all_cogs = self.get_all_cogs()
         filtered = [
@@ -61,15 +61,20 @@ class Reload(commands.Cog):
         await interaction.response.defer(ephemeral=True)
         try:
             await self.bot.reload_extension(f"cogs.{cog}")
-            await interaction.followup.send(embed = reload_succesful_embed(cog), ephemeral=True)
-            logger.success(f"Przeładowano cogs.{cog}")
+            await interaction.followup.send(
+                embed=reload_succesful_embed(cog), ephemeral=True
+            )
+            logger.info(f"Przeładowano cogs.{cog}")
         except commands.ExtensionNotFound:
-            await interaction.response.send_message(f"❌ Nie znaleziono coga `cogs.{cog}`", ephemeral=True)
-            logger.warn(f"Nie znaleziono coga cogs.{cog}")
+            await interaction.response.send_message(
+                f"❌ Nie znaleziono coga `cogs.{cog}`", ephemeral=True
+            )
+            logger.warning(f"Nie znaleziono coga cogs.{cog}")
         except Exception as e:
             embed, view = reload_failed_embed(cog, e)
             await interaction.followup.send(embed=embed, view=view, ephemeral=True)
-            logger.error(f"Błąd przy przeładowywaniu coga {cog}.", exc_info=e)
+            logger.exception(f"Błąd przy przeładowywaniu coga {cog}.")
+
 
 async def setup(bot):
     await bot.add_cog(Reload(bot))

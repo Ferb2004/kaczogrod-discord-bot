@@ -1,11 +1,9 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
+from discord.ext import commands
 
-from logger import logger, get_logger, log_cog_loaded
-from embeds import ping_embed, error_embed
-
-from datetime import datetime
+from utils.embeds import error_embed, ping_embed
+from utils.logger import get_logger, log_cog_loaded
 
 logger = get_logger(__name__)
 
@@ -22,12 +20,12 @@ class Ping(commands.Cog):
     async def ping(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True)
         try:
-            ping = round(self.bot.latency * 1000) # Mnożywy * 1000, żeby wynik był w ms
+            ping = round(self.bot.latency * 1000)  # Mnożywy * 1000, żeby wynik był w ms
             await interaction.followup.send(embed=ping_embed(ping))
         except Exception as e:
+            logger.exception("Nieoczekiwany błąd.")
             embed, view = error_embed(e)
-            await interaction.followup.send(embed=embed, view= view, ephemeral=True)
-
+            await interaction.followup.send(embed=embed, view=view, ephemeral=True)
 
 
 async def setup(bot):

@@ -1,11 +1,10 @@
-import discord
-from discord.ext import commands
-from discord import app_commands
-
-from logger import logger, get_logger, log_cog_loaded
-
 import random
 
+import discord
+from discord import app_commands
+from discord.ext import commands
+
+from utils.logger import get_logger, log_cog_loaded
 
 logger = get_logger(__name__)
 
@@ -14,18 +13,15 @@ class Moneta(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         log_cog_loaded(__name__)
 
-
     @app_commands.command(name="moneta", description="Rzut monetą.")
     async def moneta(self, interaction: discord.Interaction):
-        opcje = ['Orzeł', 'Reszka']
+        opcje = ["Orzeł", "Reszka"]
         rzut = random.choice(opcje)
         await interaction.response.send_message(f"{rzut}")
-
 
 
 async def setup(bot):

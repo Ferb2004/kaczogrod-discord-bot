@@ -1,29 +1,20 @@
 import logging
-from logging.handlers import RotatingFileHandler
 import os
+from logging.handlers import RotatingFileHandler
+from typing import ClassVar
 
+# TODO wyczyścić kod
 
 # ─────────────────────────────────────────
 # Konfiguracja katalogu i ścieżek
 # ─────────────────────────────────────────
-LOG_DIR = "logs"
-LOG_FILE = "bot.log"
+PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").strip().upper()
+LOG_DIR = os.path.join(PROJECT_ROOT, "logs")
+LOG_FILE = os.path.join(LOG_DIR, "bot.log")
 os.makedirs(LOG_DIR, exist_ok=True)
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-# ─────────────────────────────────────────
-# Niestandardowy poziom logowania: SUCCESS
-# ─────────────────────────────────────────
-# Poziom SUCCESS (25) mieści się między INFO (20) a WARNING (30),
-# co pozwala filtrować sukcesy osobno bez zagłuszania ostrzeżeń
-SUCCESS_LEVEL = 25
-logging.addLevelName(SUCCESS_LEVEL, "SUCCESS")
-
-def success(self, message, *args, **kwargs):
-    if self.isEnabledFor(SUCCESS_LEVEL):
-        self._log(SUCCESS_LEVEL, message, args, **kwargs)
-
-logging.Logger.success = success
 
 # ─────────────────────────────────────────
 # Formattery i handlery
@@ -33,23 +24,22 @@ def get_logger(name: str) -> logging.Logger:
 
 
 def log_cog_loaded(module_name: str):
-    get_logger(module_name).success("Cog aktywny i gotowy")
+    get_logger(module_name).info("Cog aktywny i gotowy")
 
 
 def setup_logger():
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(LOG_LEVEL)
 
     if logger.handlers:
         return logger
 
     class DefaultFormatter(logging.Formatter):
-        LEVEL_EMOJI = {
-            SUCCESS_LEVEL: "[✅]",
+        LEVEL_EMOJI: ClassVar[dict[int, str]] = {
             logging.INFO: "[ℹ]",
             logging.WARNING: "[⚠️]",
             logging.ERROR: "[❌]",
-            logging.CRITICAL: "[🔥]"
+            logging.CRITICAL: "[🔥]",
         }
 
         def format(self, record):
@@ -57,8 +47,8 @@ def setup_logger():
             return super().format(record)
 
         def formatException(self, ei):
-            import traceback
             import os
+            import traceback
 
             tb_lines = traceback.format_exception(*ei)
             cleaned_lines = []
@@ -92,9 +82,8 @@ def setup_logger():
 
     formatter = DefaultFormatter(
         "[%(asctime)s] %(emoji)s [%(levelname)s] [%(name)s] %(message)s",
-        datefmt= "%Y-%m-%d %H:%M:%S"
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
-
 
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
@@ -104,9 +93,9 @@ def setup_logger():
     # backupCount=5 daje łącznie ~25MB historii logów
     file_handler = RotatingFileHandler(
         os.path.join(LOG_DIR, LOG_FILE),
-        maxBytes=5 * 1024 * 1024, #5MB
+        maxBytes=5 * 1024 * 1024,  # 5MB
         backupCount=5,
-        encoding="utf-8"
+        encoding="utf-8",
     )
     file_handler.setFormatter(formatter)
 

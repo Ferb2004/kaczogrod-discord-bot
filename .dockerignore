@@ -1,3 +1,6 @@
-.env
-.github
-README.md
+.env.example
+.github/
+*.md
+media/
+dockercompose.yaml
+dockercompose-self-building.yaml
