@@ -9,7 +9,7 @@ on:
 jobs:
   docker-test:
     runs-on: ubuntu-latest
-    environment: production-secrets
+    environment: docker test secrets
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
