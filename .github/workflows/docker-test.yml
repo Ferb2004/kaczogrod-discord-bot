@@ -1,9 +1,9 @@
 name: Docker Build Test
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
       - name: Run container and check it starts
         run: |
           docker run -d --name test-bot \
-            -e FLUXER_BOT_TOKEN=dummy_token_for_test \
+            -e DISCORD_TOKEN=dummy_token_for_test \
             kaczogrod-bot:test
           sleep 5
           docker logs test-bot
