@@ -32,6 +32,8 @@ COPY --from=builder --chown=app:app /app /app
 #COPY --from=builder /usr/local/bin/python3.14 /usr/local/bin/python3.14
 #COPY --from=builder /app /app
 
+RUN mkdir -p /app/data /app/logs && chown -R app:app /app/data /app/logs
+
 USER app
 
 CMD ["python3", "./app.py"]
