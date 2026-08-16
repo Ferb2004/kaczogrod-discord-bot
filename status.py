@@ -83,10 +83,12 @@ class Status(commands.Cog):
     @tasks.loop(minutes=5)
     async def status_update(self):
         if self.gracze == 0 or self.gracze is None:
-            if version == self.latest_version:
+            if version is None or version == "unknown":
+                status = "🔨 Własna kompilacja"
+            elif version == self.latest_version:
                 status = f"{version}"
             else:
-                status = f"ℹ️ Dostępna aktualizacja | Obecja wersja: {version}."
+                status = f"ℹ️ Dostępna aktualizacja | Obecna wersja: {version}."
         else:
             status = f"{self.gracze} gracz{'y' if self.gracze != 1 else ''} na serwerze {ipSerwera}"
 
