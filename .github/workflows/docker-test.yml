@@ -9,6 +9,7 @@ on:
 jobs:
   docker-test:
     runs-on: ubuntu-latest
+    environment: production-secrets
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -27,9 +28,11 @@ jobs:
           tags: kaczogrod-bot:test
 
       - name: Run container and check it starts
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
         run: |
           docker run -d --name test-bot \
-            -e DISCORD_TOKEN=dummy_token_for_test \
+            -e DISCORD_TOKEN \
             kaczogrod-bot:test
           sleep 5
           docker logs test-bot
