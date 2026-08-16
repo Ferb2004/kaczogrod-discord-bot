@@ -1,0 +1,49 @@
+name: Docker Build Test
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+jobs:
+  docker-test:
+    runs-on: ubuntu-latest
+    environment: docker test secrets
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v3.3.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: Build image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: false
+          load: true
+          tags: kaczogrod-bot:test
+
+      - name: Run container and check it starts
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+        run: |
+          docker run -d --name test-bot \
+            -e DISCORD_TOKEN \
+            kaczogrod-bot:test
+          sleep 5
+          docker logs test-bot
+          docker inspect -f '{{.State.Running}}' test-bot | grep true
+
+      - name: Stop test container
+        if: always()
+        run: docker rm -f test-bot || true
+
+      - name: Scan image for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: kaczogrod-bot:test
+          severity: CRITICAL,HIGH

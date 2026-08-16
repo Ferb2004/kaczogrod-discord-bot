@@ -18,3 +18,11 @@ dependencies = [
     "python-dotenv==1.2.2",
     "yoyo-migrations==9.0.0",
 ]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.411",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.3",
+]

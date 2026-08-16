@@ -15,19 +15,25 @@ RUN uv sync --frozen --no-install-project --no-dev
 COPY . .
 RUN uv sync --frozen --no-dev
 
-FROM gcr.io/distroless/cc-debian12:nonroot AS production
+FROM python:3.14.7-slim-bookworm AS production
 
 ARG IMAGE_DIGEST=unknown
 ENV IMAGE_DIGEST=$IMAGE_DIGEST \
     PATH="/app/.venv/bin:/usr/local/bin:$PATH" \
     PYTHONPATH="/app/.venv/lib/python3.14/site-packages"
 
+RUN groupadd --gid 1000 app \
+    && useradd --uid 1000 --gid app --create-home --shell /usr/sbin/nologin app
+
 WORKDIR /app
+COPY --from=builder --chown=app:app /app /app
 
-COPY --from=builder /usr/local/lib/python3.14 /usr/local/lib/python3.14
-COPY --from=builder /usr/local/bin/python3.14 /usr/local/bin/python3.14
-COPY --from=builder /app /app
+#COPY --from=builder /usr/local/lib/python3.14 /usr/local/lib/python3.14
+#COPY --from=builder /usr/local/bin/python3.14 /usr/local/bin/python3.14
+#COPY --from=builder /app /app
 
-USER nonroot
+RUN mkdir -p /app/data /app/logs && chown -R app:app /app/data /app/logs
 
-CMD ["/app/.venv/bin/python3", "./app.py"]
+USER app
+
+CMD ["python3", "./app.py"]
