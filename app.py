@@ -22,6 +22,10 @@ def get_token() -> str:
 
 
 TOKEN = get_token()
+version = os.getenv("IMAGE_DIGEST")
+
+if version is None or version == "unknow":
+    version = "🔨 Własna kompilacja"
 
 # Mimo, że "command_prefix" nie jest nigdzie
 # wykorzystywane, to bez tego bot się nie uruchamia.
@@ -54,6 +58,7 @@ def asyncio_exception_handler(_loop, context):
 @bot.event
 async def on_ready():
     logger.info("Bot gotowy!")
+    logger.info(f"Wersja bota:{version}")
     try:
         synced_commands = await bot.tree.sync()
         logger.info(f"Liczba zsynchronizowanych komend: {len(synced_commands)}")
