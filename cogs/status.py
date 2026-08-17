@@ -1,4 +1,3 @@
-import asyncio
 import os
 
 import aiohttp
@@ -77,7 +76,7 @@ class Status(commands.Cog):
         self.gracze: int | None = None
         if self.server is not None:
             try:
-                mc_status = await asyncio.to_thread(self.server.status, tries=5)
+                mc_status = self.server.status(tries=5)
                 self.gracze = mc_status.players.online
                 logger.debug(f"Pobrano ilość graczy: {self.gracze}")
             except TimeoutError, OSError:
