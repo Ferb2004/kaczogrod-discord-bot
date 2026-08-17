@@ -15,7 +15,9 @@ RUN uv sync --frozen --no-install-project --no-dev
 COPY . .
 RUN uv sync --frozen --no-dev
 
-FROM python:3.14.7-slim-bookworm AS production
+FROM python:3.14.7-slim-trixie AS production
+
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 ARG IMAGE_DIGEST=unknown
 ENV IMAGE_DIGEST=$IMAGE_DIGEST \
