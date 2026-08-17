@@ -135,7 +135,7 @@ class RSS(commands.Cog):
         self.rss_feeds_parse.cancel()
         self.bot.tree.remove_command(self.group.name)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(minutes=5)
     async def rss_feeds_parse(self):
         try:
             async with aiohttp.ClientSession() as session:
