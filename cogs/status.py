@@ -1,3 +1,4 @@
+import asyncio
 import os
 
 import aiohttp
@@ -25,8 +26,11 @@ class Status(commands.Cog):
         self.gracze: int | None = None
         self.server: JavaServer | None = None
 
-    @commands.Cog.listener()
-    async def on_ready(self):
+    async def cog_load(self):
+        self.bot.loop.create_task(self._init())
+
+    async def _init(self):
+        await self.bot.wait_until_ready()
         log_cog_loaded(__name__)
 
         if ipSerwera is None:
@@ -45,6 +49,10 @@ class Status(commands.Cog):
             self.status_update.start()
         elif ipSerwera and (version is None or version == "unknown"):
             self.get_players.start()
+            self.status_update.start()
+        elif ipSerwera and version and version != "unknown":
+            self.get_players.start()
+            self.get_latest_version.start()
             self.status_update.start()
 
     async def cog_unload(self):
@@ -69,7 +77,7 @@ class Status(commands.Cog):
         self.gracze: int | None = None
         if self.server is not None:
             try:
-                mc_status = self.server.status(tries=5)
+                mc_status = await asyncio.to_thread(self.server.status, tries=5)
                 self.gracze = mc_status.players.online
                 logger.debug(f"Pobrano ilość graczy: {self.gracze}")
             except TimeoutError, OSError:
@@ -79,10 +87,12 @@ class Status(commands.Cog):
     @tasks.loop(minutes=5)
     async def status_update(self):
         if self.gracze == 0 or self.gracze is None:
-            if version == self.latest_version:
+            if version is None or version == "unknown":
+                status = "🔨 Własna kompilacja"
+            elif version == self.latest_version:
                 status = f"{version}"
             else:
-                status = f"ℹ️ Dostępna aktualizacja | Obecja wersja: {version}."
+                status = f"ℹ️ Dostępna aktualizacja | Obecna wersja: {version}."
         else:
             status = f"{self.gracze} gracz{'y' if self.gracze != 1 else ''} na serwerze {ipSerwera}"
 
@@ -99,6 +109,14 @@ class Status(commands.Cog):
     @status_update.before_loop
     async def before_status_update(self):
         await self.bot.wait_until_ready()
+
+    @get_latest_version.error
+    async def get_latest_version_error(self, error):
+        logger.error(f"Błąd w statusUpdate: {error}", exc_info=error)
+
+    @get_players.error
+    async def get_players_error(self, error):
+        logger.error(f"Błąd w statusUpdate: {error}", exc_info=error)
 
     @status_update.error
     async def update_online_count_error(self, error):
