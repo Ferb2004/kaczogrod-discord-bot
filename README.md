@@ -25,7 +25,7 @@
 - [Checki](#checki)
 # O projekcie
 
-Self hostowalny bot discord. Zrobiłem własnego, bo miałem dość głosowania na jakiś stronach oraz nie chciałem płacić, żeby odblokować jakąś funkcjonalność.
+Self hostowalny bot discord. Zrobiłem własnego, bo miałem dość głosowania na jakiś stronach oraz tego, że coraz więcej funkcji było za paywallem.
 
 
 # Instalacja
