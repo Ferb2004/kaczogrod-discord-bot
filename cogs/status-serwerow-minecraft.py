@@ -1,5 +1,6 @@
 import base64
 import io
+import traceback
 
 import discord
 from discord import app_commands
@@ -23,6 +24,12 @@ class Minecraft(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         log_cog_loaded(__name__)
+
+    async def cog_app_command_error(
+        self, interaction: discord.Interaction, error: app_commands.AppCommandError
+    ):
+        logger.error("[SlashCommand] Błąd komendy:")
+        traceback.print_exception(type(error), error, error.__traceback__)
 
     @app_commands.command(
         name="minecraft", description="Wyszukuje dane o serwerze minecraft."

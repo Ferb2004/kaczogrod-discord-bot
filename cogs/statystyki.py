@@ -114,16 +114,9 @@ class Statystyki(commands.Cog):
         self.update_online_count.cancel()
         self.bot.tree.remove_command(self.group.name)
 
-    @commands.Cog.listener()
-    async def on_app_command_error(
+    async def cog_app_command_error(
         self, interaction: discord.Interaction, error: app_commands.AppCommandError
     ):
-        if isinstance(error, app_commands.MissingPermissions):
-            await interaction.response.send_message(
-                "Nie masz uprawnień do użycia tej komendy.", ephemeral=True
-            )
-            return
-
         logger.error("[SlashCommand] Błąd komendy:")
         traceback.print_exception(type(error), error, error.__traceback__)
 
