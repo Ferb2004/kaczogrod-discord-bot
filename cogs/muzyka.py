@@ -18,7 +18,6 @@ from utils.logger import get_logger, log_cog_loaded
 logger = get_logger(__name__)
 
 yt_music = YTMusic()
-# TODO parsowanie ze spotify
 # TODO szukanie przez ytmusic
 # TODO dodać embedy i przyciski
 # TODO dodać pauzowanie kolejki kiedy bot zostaje sam i wychodzi dopiero po pewnym czasie
