@@ -11,22 +11,26 @@
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/badge/ruff-%23D7FF64?style=for-the-badge&logo=ruff&logoColor=black" alt="Ruff"></a>
   <a href="https://github.com/astral-sh/uv"><img alt="uv" src="https://img.shields.io/badge/uv-%23DE5FE9.svg?style=for-the-badge&logo=uv&logoColor=white"></a>
   <a href="https://github.com/microsoft/pyright"><img src="https://img.shields.io/badge/pyright-checked-%231674b1?style=for-the-badge" alt="Pyright"></a>
+  <a href="https://madebyhuman.iamjarl.com"><img src="https://madebyhuman.iamjarl.com/badges/co-created-white.svg" height="28"></a>
 </p>
 
 # Spis treści
 - [O projekcie](#o-projekcie)
+  - [Użycie AI](#użycie-ai)
 
 - [Instalacja](#instalacja)
   - [Docker Compose](#docker-compose)
   - [Plik .env](#plik-env)
-  - [Własne budowanie obrazu](#własne-budowanie-obrazu)
+  - [Budowanie własnego obrazu](#budowanie-własnego-obrazu)
 - [Funkcje](#funkcje)
 - [Planowane funkcje](#planowane-funkcje)
 - [Checki](#checki)
 # O projekcie
 
-Self hostowalny bot discord. Zrobiłem własnego, bo miałem dość głosowania na jakiś stronach oraz tego, że coraz więcej funkcji było za paywallem.
+Self hostowalny w dockerze bot discord, napisany w pythonie. Przeznaczony do użytku na małej ilości serwerów, głównie dla znajomych.
 
+# Użycie AI
+AI było używane głównie jako pomoc w znalezieniu i wytłumaczeniu, jakie podejście do danego problemu jest najlepsze. Zostało użyte z braku podobnych projektów z ADR (lub innej dokumentacji, która dobrze opisywałaby działanie bota). AI było też używane do pomocy w szukaniu zależności, które odpowiadały potrzebom projektu.
 
 # Instalacja
 
@@ -40,8 +44,11 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/app/data
-      - ./logs:/app/logs
+      - bot-data:/app/data
+      - bot-logs:/app/logs
+volumes:
+  bot-data: null
+  bot-logs: null
 ```
 ---
 
@@ -54,6 +61,9 @@ DISCORD_TOKEN=
 IP_SERWERA=
 #Port serwera minecraft. Jeśli nie będzie podany, bot będzie sprawdzał na porcie 25565.
 PORT_SERWERA=
+#Potrzebne, jeśli bot ma odtwarzać muzykę ze spotify.
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
 #Więcej informacji w logach.
 LOG_LEVEL=DEBUG
 ```
@@ -70,8 +80,11 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/app/data
-      - ./logs:/app/logs
+      - bot-data:/app/data
+      - bot-logs:/app/logs
+volumes:
+  bot-data: null
+  bot-logs: null
 ```
 # Funkcje
 -  Komenda do rzutu monetą.
@@ -82,14 +95,16 @@ services:
 -  Wysyłanie feedów RSS/Atom.
 -  Nadawanie roli użytkownikom przy dołączeniu na serwer.
 -  Role, które użytkownicy mogą sami sobie wybrać.
+-  Puszczanie muzyki.
 
 # Planowane funkcje
-- Puszczanie muzyki.
+- Dodanie embedów oraz przycisków do coga z muzyką.
+- Wysyłanie cen z GGDEALS.
 - Tymczasowe kanały.
 
 
 # Checki
 Checki, które projekt przechodzi.
-- `ruff format --check .`
-- `ruff check .`
-- `pyright .`
+- `uv run ruff format --check .`
+- `uv run ruff check .`
+- `uv run pyright .`

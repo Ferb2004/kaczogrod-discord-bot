@@ -17,6 +17,7 @@ class Moneta(commands.Cog):
     async def on_ready(self):
         log_cog_loaded(__name__)
 
+
     @app_commands.command(name="moneta", description="Rzut monetą.")
     async def moneta(self, interaction: discord.Interaction):
         opcje = ["Orzeł", "Reszka"]
