@@ -11,12 +11,12 @@ dependencies = [
     "davey==0.1.6",
     "discord-py==2.7.1",
     "feedparser==6.0.14",
-    "mcstatus==14.1.0",
+    "mcstatus==14.2.0",
     "pip==26.2.1",
     "pygithub==2.10.0",
     "pynacl==1.6.2",
     "python-dotenv==1.2.3",
-    "ruff==0.16.4",
+    "spotifyscraper>=3.9.2",
     "spotipy==2.26.0",
     "yoyo-migrations==9.0.0",
     "yt-dlp==2026.8.19",
@@ -25,8 +25,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pyright>=1.1.411",
+    "pyright==1.1.413",
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
-    "ruff>=0.16.3",
+    "ruff==0.16.6",
 ]
