@@ -100,6 +100,6 @@ volumes:
 
 # Checki
 Checki, które projekt przechodzi.
-- `ruff format --check .`
-- `ruff check .`
-- `pyright .`
+- `uv run ruff format --check .`
+- `uv run ruff check .`
+- `uv run pyright .`
