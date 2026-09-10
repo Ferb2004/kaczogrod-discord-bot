@@ -157,7 +157,7 @@ async def resolve_items(search: str) -> list[str]:
 
 
 class GuildMusicState:
-    """Stan odtwarzacza dla jednego serwera."""
+    """Stan odtwarzacza per serwer."""
 
     def __init__(self):
         self.queue: list[str] = []
@@ -362,8 +362,8 @@ class Muzyka(commands.Cog):
             await interaction.followup.send(embed=embed, view=view)
 
     @app_commands.guild_only()
-    @app_commands.command(name="skipall", description="Czyści kolejkę.")
-    async def skipall(self, interaction: discord.Interaction):
+    @app_commands.command(name="clearqueue", description="Czyści kolejkę.")
+    async def clearqueue(self, interaction: discord.Interaction):
         if (
             not isinstance(interaction.user, discord.Member)
             or interaction.user.voice is None
