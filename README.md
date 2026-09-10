@@ -61,6 +61,9 @@ DISCORD_TOKEN=
 IP_SERWERA=
 #Port serwera minecraft. Jeśli nie będzie podany, bot będzie sprawdzał na porcie 25565.
 PORT_SERWERA=
+#Potrzebne, jeśli bot ma odtwarzać muzykę ze spotify.
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
 #Więcej informacji w logach.
 LOG_LEVEL=DEBUG
 ```
@@ -92,9 +95,11 @@ volumes:
 -  Wysyłanie feedów RSS/Atom.
 -  Nadawanie roli użytkownikom przy dołączeniu na serwer.
 -  Role, które użytkownicy mogą sami sobie wybrać.
+-  Puszczanie muzyki.
 
 # Planowane funkcje
-- Puszczanie muzyki.
+- Dodanie embedów oraz przycisków do coga z muzyką.
+- Wysyłanie cen z GGDEALS.
 - Tymczasowe kanały.
 
 
