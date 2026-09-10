@@ -28,7 +28,9 @@ class GithubRepo(commands.Cog):
     async def on_ready(self):
         log_cog_loaded(__name__)
 
-    async def cog_app_command_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError):
+    async def cog_app_command_error(
+        self, interaction: discord.Interaction, error: app_commands.AppCommandError
+    ):
         logger.error("[SlashCommand] Błąd komendy:")
         traceback.print_exception(type(error), error, error.__traceback__)
 
