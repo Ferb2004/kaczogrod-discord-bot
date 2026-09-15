@@ -20,7 +20,7 @@ FROM mwader/static-ffmpeg:9.0.1 AS ffmpeg
 FROM python:3.14.7-slim-trixie AS production
 
 RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends libopus0 \
+    && apt-get install -y --no-install-recommends libopus0=1.5.2-2 \
     && rm -rf /var/lib/apt/lists/*
 
 ARG IMAGE_DIGEST=unknown
