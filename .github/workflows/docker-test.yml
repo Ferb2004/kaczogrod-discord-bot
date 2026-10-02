@@ -1,9 +1,9 @@
 name: Docker Build Test
 on:
   push:
-    branches: [main, dev]
+    branches: [testing]
   pull_request:
-    branches: [main, dev]
+    branches: [main, testing]
   workflow_dispatch:
 
 jobs:
