@@ -1,6 +1,6 @@
-FROM python:3.14.7-bookworm AS builder
+FROM python:3.14.8-bookworm AS builder
 
-COPY --from=ghcr.io/astral-sh/uv:0.12.15 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.13.6 /uv /uvx /bin/
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN uv sync --frozen --no-install-project --no-dev
 COPY . .
 RUN uv sync --frozen --no-dev
 
-FROM mwader/static-ffmpeg:9.0.1 AS ffmpeg
+FROM mwader/static-ffmpeg:9.0.2 AS ffmpeg
 
 FROM python:3.14.7-slim-trixie AS production
 
