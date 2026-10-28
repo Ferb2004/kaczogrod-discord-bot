@@ -18,7 +18,7 @@ from utils.embeds import error_embed, rss_embed
 from utils.logger import get_logger, log_cog_loaded
 
 logger = get_logger(__name__)
-
+#TODO zmienić kod, tak żeby korzystał z request.py
 
 async def fetch_feed(url, session, etag=None, modified=None):
     headers = {}
@@ -115,7 +115,7 @@ async def send_entry(channel, feed, entry, session):
         article_link=entry.link,
         article_image_url=og_image,
         description=truncate(clean_html(entry.get("summary", ""))),
-        author=entry.get("author", "Nieznany"),
+        author=entry.get("author", None),
         published_at=entry.get("published_parsed", None),
     )
     await channel.send(embed=embed, view=view)
@@ -125,13 +125,18 @@ class RSS(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.name = self.__class__.__name__
+        self.session: aiohttp.ClientSession | None = None
 
         self.group = RSSKomendy(self)
         self.bot.tree.add_command(self.group)
 
         self.rss_feeds_parse.start()
 
+    async def cog_load(self):
+        self.session = aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10),)
+
     async def cog_unload(self):
+        await self.session.close()
         self.rss_feeds_parse.cancel()
         self.bot.tree.remove_command(self.group.name)
 
