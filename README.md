@@ -102,6 +102,7 @@ volumes:
 -  Wysyłanie cen z GGDEALS.
 
 # Planowane funkcje
+- Baza danych zamiast zapisywanie do jsona.
 - Dodanie embedów oraz przycisków do coga z muzyką.
 - Tymczasowe kanały.
 
