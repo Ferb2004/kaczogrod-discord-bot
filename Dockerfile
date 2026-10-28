@@ -1,6 +1,6 @@
 FROM python:3.14.7-bookworm AS builder
 
-COPY --from=ghcr.io/astral-sh/uv:0.12.5 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.12.15 /uv /uvx /bin/
 
 WORKDIR /app
 
@@ -15,9 +15,13 @@ RUN uv sync --frozen --no-install-project --no-dev
 COPY . .
 RUN uv sync --frozen --no-dev
 
+FROM mwader/static-ffmpeg:9.0.1 AS ffmpeg
+
 FROM python:3.14.7-slim-trixie AS production
 
-RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends libopus0=1.5.2-2 \
+    && rm -rf /var/lib/apt/lists/*
 
 ARG IMAGE_DIGEST=unknown
 ENV IMAGE_DIGEST=$IMAGE_DIGEST \
@@ -30,9 +34,8 @@ RUN groupadd --gid 1000 app \
 WORKDIR /app
 COPY --from=builder --chown=app:app /app /app
 
-#COPY --from=builder /usr/local/lib/python3.14 /usr/local/lib/python3.14
-#COPY --from=builder /usr/local/bin/python3.14 /usr/local/bin/python3.14
-#COPY --from=builder /app /app
+COPY --from=ffmpeg /ffmpeg /usr/local/bin/ffmpeg
+COPY --from=ffmpeg /ffprobe /usr/local/bin/ffprobe
 
 RUN mkdir -p /app/data /app/logs && chown -R app:app /app/data /app/logs
 
