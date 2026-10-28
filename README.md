@@ -57,13 +57,16 @@ volumes:
 DISCORD_TOKEN=
 
 #---Opcjonalne---
+
 #Ip serwera minecraft, którego liczba graczy ma być pokazywana.
 IP_SERWERA=
 #Port serwera minecraft. Jeśli nie będzie podany, bot będzie sprawdzał na porcie 25565.
 PORT_SERWERA=
-#Potrzebne, jeśli bot ma odtwarzać muzykę ze spotify.
+
+#Potrzebne, jeśli bot ma odtwarzać muzykę z linku spotify.
 SPOTIFY_CLIENT_ID=
 SPOTIFY_CLIENT_SECRET=
+
 #Więcej informacji w logach.
 LOG_LEVEL=DEBUG
 ```
