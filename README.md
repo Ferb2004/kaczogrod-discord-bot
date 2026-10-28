@@ -88,7 +88,7 @@ volumes:
 ```
 # Funkcje
 -  Komenda do rzutu monetą.
--  Komenda do przekierowania na githuba.
+-  Komenda do pokazywania statystyk repozytorium projektu.
 -  Kanały do liczenia członków online oraz botów na serwerze.
 -  Pokazywanie liczby graczy na serwerze minecraft w statusie.
 -  Komenda do wyświetlania informacji o serwerach minecraft.
@@ -96,10 +96,10 @@ volumes:
 -  Nadawanie roli użytkownikom przy dołączeniu na serwer.
 -  Role, które użytkownicy mogą sami sobie wybrać.
 -  Puszczanie muzyki.
+-  Wysyłanie cen z GGDEALS.
 
 # Planowane funkcje
 - Dodanie embedów oraz przycisków do coga z muzyką.
-- Wysyłanie cen z GGDEALS.
 - Tymczasowe kanały.
 
 
