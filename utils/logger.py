@@ -3,14 +3,17 @@ import os
 from logging.handlers import RotatingFileHandler
 from typing import ClassVar
 
-# TODO wyczyścić kod
+from dotenv import load_dotenv
 
 # ─────────────────────────────────────────
-# Konfiguracja katalogu i ścieżek
+# Konfiguracja katalogu, ścieżek oraz env
 # ─────────────────────────────────────────
+load_dotenv()
+
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").strip().upper()
+LOG_FILE_ENV = os.getenv("LOG_FILE", "FALSE").strip().upper()
 LOG_DIR = os.path.join(PROJECT_ROOT, "logs")
 LOG_FILE = os.path.join(LOG_DIR, "bot.log")
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -81,7 +84,7 @@ def setup_logger():
             return "".join(cleaned_lines)
 
     formatter = DefaultFormatter(
-        "[%(asctime)s] %(emoji)s [%(levelname)s] [%(name)s] %(message)s",
+        "[%(asctime)s] %(emoji)s [%(levelname)s] [%(name)s.%(funcName)s] %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
@@ -91,16 +94,17 @@ def setup_logger():
     # 5MB na plik — kompromis między rozmiarem a zachowaniem
     # wystarczającej historii przy typowym ruchu bota (~1k eventów/h)
     # backupCount=5 daje łącznie ~25MB historii logów
-    file_handler = RotatingFileHandler(
-        os.path.join(LOG_DIR, LOG_FILE),
-        maxBytes=5 * 1024 * 1024,  # 5MB
-        backupCount=5,
-        encoding="utf-8",
-    )
-    file_handler.setFormatter(formatter)
+    if LOG_FILE_ENV == "TRUE":
+        file_handler = RotatingFileHandler(
+            os.path.join(LOG_DIR, LOG_FILE),
+            maxBytes=5 * 1024 * 1024,  # 5MB
+            backupCount=5,
+            encoding="utf-8",
+        )
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
 
     logger.addHandler(console_handler)
-    logger.addHandler(file_handler)
 
     return logger
 
